@@ -14,13 +14,13 @@ class Tile():
 
 
 def CreateMap(width, height, input):
-  index = 4
+  index = 3
   world = []
   for i in xrange(width):
     world.append([])
-  for j in xrange(height):
-    world[i].append(Tile(i, j, input[index]))
-    # print str(i) + "," + str(j) + ": " + str(input[index])
-    index = index + 2
+    for j in xrange(height):
+      world[i].append(Tile(i, j, input[i+1][j]))
+      print str(i) + "," + str(j) + ": " + str(input[i+1][j])
+      index = index + 1
     
   return world

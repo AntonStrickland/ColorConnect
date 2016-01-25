@@ -14,13 +14,15 @@ else:
 	cfgPath = argv[1]
   
 print "Creating grid..."
+gridInput = []
 with open(cfgPath) as input:
-	gridInput = input.read()
+  for line in input:
+    gridInput.append(line.split())
 	
 print gridInput
 
-gridSize = int(gridInput[0])
-numberOfColors = int(gridInput[2])
+gridSize = int(gridInput[0][0])
+numberOfColors = int(gridInput[0][1])
 grid = map.CreateMap(gridSize, gridSize, gridInput)
 
 myAgent = agent.Agent()
