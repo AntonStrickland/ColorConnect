@@ -4,7 +4,6 @@
 import agent
 import map
 import visual
-import sys 
 from sys import argv
 import random
 
@@ -42,7 +41,7 @@ if len(argv) < 2:
 else:
 	cfgPath = argv[1]
   
-print("Creating grid...")
+# print("Creating grid...")
 gridInput = []
 with open(cfgPath) as input:
   for line in input:
@@ -59,9 +58,11 @@ percept = None
 
 # action = myAgent.Action(percept)
 
+visual.setupColors(grid, gridSize, numberOfColors)
+
 while True:
   # takeTurn(grid)
-  visual.visualize(grid, gridSize)
+  visual.visualize(grid, gridSize, numberOfColors)
   
   
 
