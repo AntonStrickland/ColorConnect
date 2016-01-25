@@ -17,13 +17,13 @@ color = (255,0,0)
 colorRed = (255,0,0)
 colorGreen = (0,255,0)
 colorBlue = (0,0,255)
-colorDarkBlue = (0,0,128)
+colorOrange = (255,165,0)
 colorWhite = (255,255,255)
 colorBlack = (0,0,0)
 colorPink = (255,200,200)
 
-colorList = [colorRed, colorBlue]
-
+colorList = [colorRed, colorBlue, colorGreen, colorOrange, colorPink, colorWhite]
+bgColor = (54,54,54)
 
 
 pygame.display.update()
@@ -42,7 +42,7 @@ with open(cfgPath) as input:
   for line in input:
     gridInput.append(line.split())
 	
-print(gridInput)
+# print(gridInput)
 
 gridSize = int(gridInput[0][0])
 numberOfColors = int(gridInput[0][1])
@@ -57,6 +57,7 @@ thickness = 0
 x = 100
 y = 100
 boxWidth = 50
+halfBoxWidth = 25
 
 while True:
 
@@ -71,15 +72,18 @@ while True:
   for i in range(gridSize):
     for j in range(gridSize):
       currentColor = grid[i][j].colored
+      pygame.draw.rect(screen, bgColor, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
+      
       if currentColor == "e":
         currentColor = colorBlack
       else:
         currentColor = colorList[int(currentColor)]
-        
+       
+      
       if grid[i][j].startPoint is True or grid[i][j].endPoint is True:
-        pygame.draw.circle(screen, currentColor, (x+(boxWidth*i),y+(boxWidth*j)), 25, thickness)
-      else:
-        pygame.draw.rect(screen, currentColor, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
+        pygame.draw.circle(screen, currentColor, (x+(boxWidth*i)+halfBoxWidth,y+(boxWidth*j)+halfBoxWidth), 15, thickness)
+      #else:
+      # pygame.draw.rect(screen, currentColor, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
    
 
   # update the screen

@@ -6,8 +6,8 @@ class Tile():
     self.x = x
     self.y = y
     self.colored = c
-    self.startPoint = True
-    self.endPoint = True
+    self.startPoint = False
+    self.endPoint = False
   
   def __str__(self):
     return str(self.x) + "," + str(self.y) + ": " + str(self.colored)
@@ -16,11 +16,22 @@ class Tile():
 def CreateMap(width, height, input):
   index = 3
   world = []
+  seenColors = []
   for i in range(width):
     world.append([])
     for j in range(height):
-      world[i].append(Tile(i, j, input[i+1][j]))
-      print (str(i) + "," + str(j) + ": " + str(input[i+1][j]))
+      newTile = Tile(i, j, input[i+1][j])
+      
+      if newTile.colored != "e":
+        for col in seenColors:
+          if col == newTile.colored:
+            newTile.endPoint = True
+        if newTile.endPoint is not True:
+          newTile.startPoint = True
+          seenColors.append(newTile.colored)
+      
+      world[i].append(newTile)
+      # print (str(i) + "," + str(j) + ": " + str(input[i+1][j]))
       index = index + 1
     
   return world
