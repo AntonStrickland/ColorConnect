@@ -7,14 +7,15 @@ import visual
 from sys import argv
 import random
 
+random.seed(0)
 
-def getBestMove(move, best):
-  if (move.cost < best.cost):
-    best = move
-  elif (cost == best):
+def getBestMove(thisMove, bestMove):
+  if (thisMove.cost < bestMove.cost):
+    bestMove = thisMove
+  elif (thisMove.cost == bestMove.cost):
     if (random.random() < 0.5):
-      best = move
-  return best
+      bestMove = thisMove
+  return bestMove
       
 def takeTurn(grid):
   currentPos = startPos #for each color
@@ -56,6 +57,22 @@ grid = map.CreateMap(gridSize, gridSize, gridInput)
 myAgent = agent.Agent()
 percept = None
 
+# Keep track of the start and end points
+startPointList = []
+endPointList = []
+for i in range(gridSize):
+  for j in range(gridSize):
+    if grid[i][j].colored is not "e":
+      if grid[i][j].startPoint is True:
+        startPointList.append((grid[i][j].colored, i, j))
+      elif grid[i][j].endPoint is True:
+        endPointList.append((grid[i][j].colored, i, j))
+
+# Create the controllers for each color
+controllerList = []
+for c in range(numberOfColors):
+  controllerList.append(agent.ColorController(startPointList[c][0], startPointList[c][1],startPointList[c][2]))
+
 # action = myAgent.Action(percept)
 
 visual.setupColors(grid, gridSize, numberOfColors)
@@ -63,6 +80,14 @@ visual.setupColors(grid, gridSize, numberOfColors)
 while True:
   # takeTurn(grid)
   visual.visualize(grid, gridSize, numberOfColors)
+  
+  for controller in controllerList:
+    validMove = False
+    while(not validMove):
+        validMove = controller.checkMoveValidity(gridSize, gridSize, grid)
+    newX = visual.x + (controller.pos_x * visual.boxWidth) + visual.halfBoxWidth
+    newY = visual.y + (controller.pos_y * visual.boxWidth) + visual.halfBoxWidth
+    visual.colorPointList[controller.id].append( (newX, newY) )
   
   
 
