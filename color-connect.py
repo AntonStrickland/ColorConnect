@@ -6,6 +6,33 @@ import map
 import visual
 import sys 
 from sys import argv
+import random
+
+
+def getBestMove(move, best):
+  if (move.cost < best.cost):
+    best = move
+  elif (cost == best):
+    if (random.random() < 0.5):
+      best = move
+  return best
+      
+def takeTurn(grid):
+  currentPos = startPos #for each color
+  
+  #Check moves for each color, pick the best
+  for c in range(numberOfColors):
+    if (isValid(move)):
+      move.cost = calculateCost(move)
+      best = getBestMove(move, best)
+    colorMoves.append(best)
+   
+  #Pick the best move among all the colors
+  best = None
+  for move in colorMoves:
+    best = getBestMove(move, best)
+    
+  takeAction(best)
 
 # Set config filepath
 cfgPath = ''
@@ -33,4 +60,10 @@ percept = None
 # action = myAgent.Action(percept)
 
 while True:
+  # takeTurn(grid)
   visual.visualize(grid, gridSize)
+  
+  
+
+    
+    
