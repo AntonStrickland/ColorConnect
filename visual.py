@@ -1,3 +1,6 @@
+#Name: Anton Strickland
+#CS5400 Puzzle Project 1
+
 import pygame
 import sys 
 
@@ -16,7 +19,8 @@ colorBlack = (0,0,0)
 colorPink = (255,200,200)
 
 colorList = [colorRed, colorBlue, colorGreen, colorOrange, colorPink, colorWhite]
-bgColor = (54,54,54)
+bgColor1 = (54,54,54)
+bgColor2 = (45,45,45)
 
 colorPointList = []
 
@@ -59,12 +63,19 @@ def visualize(grid, gridSize, numberOfColors):
       
 
   screen.fill(colorBlack)
-  
+  colorBGIndex = 0
   for i in range(gridSize):
+    colorBGIndex = colorBGIndex + 1
     for j in range(gridSize):
       currentColor = grid[i][j].colored
-      pygame.draw.rect(screen, bgColor, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
       
+      if (colorBGIndex%2 == 0):
+        pygame.draw.rect(screen, bgColor1, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
+      else:
+        pygame.draw.rect(screen, bgColor2, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
+        
+      colorBGIndex = colorBGIndex + 1
+        
       if currentColor == "e":
         currentColor = colorBlack
       else:
