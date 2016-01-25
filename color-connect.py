@@ -82,12 +82,13 @@ while True:
   visual.visualize(grid, gridSize, numberOfColors)
   
   for controller in controllerList:
-    validMove = False
-    while(not validMove):
-        validMove = controller.checkMoveValidity(gridSize, gridSize, grid)
-    newX = visual.x + (controller.pos_x * visual.boxWidth) + visual.halfBoxWidth
-    newY = visual.y + (controller.pos_y * visual.boxWidth) + visual.halfBoxWidth
-    visual.colorPointList[controller.id].append( (newX, newY) )
+    if controller.reachedGoal is False:
+      validMove = False
+      while(not validMove):
+          validMove = controller.checkMoveValidity(gridSize, gridSize, grid)
+      newX = visual.x + (controller.pos_x * visual.boxWidth) + visual.halfBoxWidth
+      newY = visual.y + (controller.pos_y * visual.boxWidth) + visual.halfBoxWidth
+      visual.colorPointList[controller.id].append( (newX, newY) )
   
   
 
