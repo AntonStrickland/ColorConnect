@@ -95,5 +95,5 @@ def visualize(grid, gridSize, numberOfColors):
 
   # update the screen
   pygame.display.update()
-  pygame.time.delay(500)
+  pygame.time.delay(250)
   

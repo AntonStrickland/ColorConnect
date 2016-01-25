@@ -38,36 +38,40 @@ class ColorController():
         return True
       else:
         return False
-      
-    def checkMoveValidity(self, maxWidth, maxHeight, world):
-      r = random.randint(0,4)
-      
-      #Stay in the same tile
-      if (r == 0):
-        return True
-			
-      # Move left		
-      if (r == 1 and self.pos_x - 1 >= 0 and self.checkColorConnect(world[self.pos_x-1][self.pos_y])):
+        
+    def takeAction(self, move, world):
+      if (move == "Left"):
         self.pos_x -= 1
-        world[self.pos_x][self.pos_y].colored = str(self.id)
+        
+      if (move == "Right"):
+        self.pos_x += 1
+        
+      if (move == "Up"):
+        self.pos_y -= 1
+        
+      if (move == "Down"):
+        self.pos_y += 1
+      
+      # print (str(self.pos_x) + "," + str(self.pos_y))
+      world[self.pos_x][self.pos_y].colored = str(self.id)
+      return
+      
+    def checkMoveValidity(self, move, maxWidth, maxHeight, world):
+
+      # Move left		
+      if (move == "Left" and self.pos_x - 1 >= 0 and self.checkColorConnect(world[self.pos_x-1][self.pos_y])):
         return True
       
       # Move right
-      if (r == 2 and self.pos_x + 1 < maxWidth and self.checkColorConnect(world[self.pos_x+1][self.pos_y])):
-        self.pos_x += 1
-        world[self.pos_x][self.pos_y].colored = str(self.id)
+      if (move == "Right" and self.pos_x + 1 < maxWidth and self.checkColorConnect(world[self.pos_x+1][self.pos_y])):
         return True
 			
       # Move up		
-      if (r == 3 and self.pos_y - 1 >= 0 and self.checkColorConnect(world[self.pos_x][self.pos_y-1])):
-        self.pos_y -= 1
-        world[self.pos_x][self.pos_y].colored = str(self.id)
+      if (move == "Up" and self.pos_y - 1 >= 0 and self.checkColorConnect(world[self.pos_x][self.pos_y-1])):
         return True
 			
       # Move down		
-      if (r == 4 and self.pos_y + 1 < maxHeight and self.checkColorConnect(world[self.pos_x][self.pos_y+1])):
-        self.pos_y += 1
-        world[self.pos_x][self.pos_y].colored = str(self.id)
+      if (move == "Down" and self.pos_y + 1 < maxHeight and self.checkColorConnect(world[self.pos_x][self.pos_y+1])):
         return True
       
       return False

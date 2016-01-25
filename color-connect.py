@@ -10,11 +10,14 @@ import random
 random.seed(0)
 
 def getBestMove(thisMove, bestMove):
-  if (thisMove.cost < bestMove.cost):
+  #print("This: " + thisMove[0] + str(thisMove[1]))
+  #print("Best: " + bestMove[0] + str(bestMove[1]))
+  if (thisMove[1] > bestMove[1]):
     bestMove = thisMove
-  elif (thisMove.cost == bestMove.cost):
+  elif (thisMove[1] == bestMove[1]):
     if (random.random() < 0.5):
       bestMove = thisMove
+  # print("Winner: " + bestMove[0] + str(bestMove[1]))
   return bestMove
       
 def takeTurn(grid):
@@ -75,22 +78,52 @@ for c in range(numberOfColors):
 
 # action = myAgent.Action(percept)
 
+moveList = [("Left", 1), ("Right", 1), ("Up", 1), ("Down", 1)]
+validList = []
+costList = []
+colorMoves = []
+
 visual.setupColors(grid, gridSize, numberOfColors)
 
-while True:
+terminationCondition = False
+
+while (not terminationCondition):
   # takeTurn(grid)
   visual.visualize(grid, gridSize, numberOfColors)
   
+  del colorMoves[:]
+  best = None
   for controller in controllerList:
     if controller.reachedGoal is False:
       validMove = False
-      while(not validMove):
-          validMove = controller.checkMoveValidity(gridSize, gridSize, grid)
-      newX = visual.x + (controller.pos_x * visual.boxWidth) + visual.halfBoxWidth
-      newY = visual.y + (controller.pos_y * visual.boxWidth) + visual.halfBoxWidth
-      visual.colorPointList[controller.id].append( (newX, newY) )
+      for move in moveList:
+        if (controller.checkMoveValidity(move[0], gridSize, gridSize, grid)):
+          # print("Valid: " + move[0])
+          validList.append(move)
+          if (best is None):
+            best = move
+          best = getBestMove(move, best)
+    colorMoves.append(best)
+  # print("Best move among the colors:")
+  # print (colorMoves)
+  for move in colorMoves:
+    if (best is None):
+      best = move
+    if (move is not None):
+      best = getBestMove(move, best)
   
+  bestIndex = colorMoves.index(best)
   
-
+  # If there is a move to be made, then make the best one. Else, end the game in failure.
+  if (best is not None):
+    controllerList[bestIndex].takeAction(best[0], grid)
+        
+    newX = visual.x + (controllerList[bestIndex].pos_x * visual.boxWidth) + visual.halfBoxWidth
+    newY = visual.y + (controllerList[bestIndex].pos_y * visual.boxWidth) + visual.halfBoxWidth
+    visual.colorPointList[controllerList[bestIndex].id].append( (newX, newY) )
+  else:
+    terminationCondition = True
+  
+print ("No moves remaining. Game over!")
     
     
