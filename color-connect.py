@@ -4,6 +4,7 @@
 import agent
 import map
 import visual
+import bfts
 from sys import argv
 import random
 
@@ -19,23 +20,8 @@ def getBestMove(thisMove, bestMove):
       bestMove = thisMove
   # print("Winner: " + bestMove[0] + str(bestMove[1]))
   return bestMove
-      
-def takeTurn(grid):
-  currentPos = startPos #for each color
   
-  #Check moves for each color, pick the best
-  for c in range(numberOfColors):
-    if (isValid(move)):
-      move.cost = calculateCost(move)
-      best = getBestMove(move, best)
-    colorMoves.append(best)
-   
-  #Pick the best move among all the colors
-  best = None
-  for move in colorMoves:
-    best = getBestMove(move, best)
-    
-  takeAction(best)
+
 
 # Set config filepath
 cfgPath = ''
@@ -43,7 +29,7 @@ if len(argv) < 2:
   print("Please specify a file path for the puzzle instance text file.")
   exit()
 else:
-	cfgPath = argv[1]
+  cfgPath = argv[1]
   
 # print("Creating grid...")
 gridInput = []
@@ -78,25 +64,28 @@ for c in range(numberOfColors):
 
 # action = myAgent.Action(percept)
 
-moveList = [("Left", 1), ("Right", 1), ("Up", 1), ("Down", 1)]
+actionSet = [("Left", 1), ("Right", 1), ("Up", 1), ("Down", 1)]
 validList = []
-costList = []
 colorMoves = []
 
 visual.setupColors(grid, gridSize, numberOfColors)
 
 terminationCondition = False
 
+# This is where we do the thinking for the game strategy
+
+
+
+
+# Carry out the best strategy we've found
 while (not terminationCondition):
-  # takeTurn(grid)
   visual.visualize(grid, gridSize, numberOfColors)
   
   del colorMoves[:]
   best = None
   for controller in controllerList:
     if controller.reachedGoal is False:
-      validMove = False
-      for move in moveList:
+      for move in actionSet:
         if (controller.checkMoveValidity(move[0], gridSize, gridSize, grid)):
           # print("Valid: " + move[0])
           validList.append(move)

@@ -1,15 +1,13 @@
 #Name: Anton Strickland
 #CS5400 Puzzle Project 1
 
-import random
-
 class Agent():
 
   def __init__(self):
     pass
 
   def Action(self, percept):
-    state = UpdateState(state, percept)
+    state = self.UpdateState(state, percept)
     if seq is None:
       goal = FormulateGoal(state)
       problem = FormulateProblem(state, goal)
@@ -21,6 +19,20 @@ class Agent():
     seq = Rest(seq)
     
     return action
+    
+  def UpdateState(state, percept):
+    pass
+    
+  def FormulateGoal(state):
+    pass
+  
+  def FormulateProblem(state, goal):
+    pass
+    
+  def Search(problem):
+    pass
+    
+  
     
 class ColorController():
 
@@ -38,6 +50,23 @@ class ColorController():
         return True
       else:
         return False
+        
+    def result(self, state, move):
+      if (move == "Left"):
+        newX = self.pos_x - 1
+        
+      if (move == "Right"):
+        newX = self.pos_x + 1
+        
+      if (move == "Up"):
+        newY = self.pos_y - 1
+        
+      if (move == "Down"):
+        newY = self.pos_y + 1
+      
+      # print (str(self.pos_x) + "," + str(self.pos_y))
+      state[newX][newY].colored = str(self.id)
+      return
         
     def takeAction(self, move, world):
       if (move == "Left"):
