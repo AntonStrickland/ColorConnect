@@ -45,16 +45,6 @@ def setupColors(grid, gridSize, numberOfColors):
         newY = y + (grid[i][j].y * boxWidth) + halfBoxWidth
         colorPointList[int(grid[i][j].colored)].append((newX, newY))
   
-  # Test the lines
-  # newX = x + (1 * boxWidth) + halfBoxWidth
-  # newY = y + (0 * boxWidth) + halfBoxWidth
-  # colorPointList[0].append((newX, newY))
-  
-  # Test the lines
-  # newX = x + (1 * boxWidth) + halfBoxWidth
-  # newY = y + (1 * boxWidth) + halfBoxWidth
-  # colorPointList[0].append((newX, newY))
-  
 def visualize(grid, gridSize, numberOfColors):
   for event in pygame.event.get():
     if event.type == pygame.QUIT:

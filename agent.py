@@ -51,7 +51,11 @@ class ColorController():
       else:
         return False
         
-    def result(self, state, move):
+    def result(self, newState, move):
+    
+      newX = self.pos_x
+      newY = self.pos_y
+      
       if (move == "Left"):
         newX = self.pos_x - 1
         
@@ -65,8 +69,15 @@ class ColorController():
         newY = self.pos_y + 1
       
       # print (str(self.pos_x) + "," + str(self.pos_y))
-      state[newX][newY].colored = str(self.id)
-      return
+      newState.board[newX][newY].colored = str(self.id)
+      
+      # Update the same controller within the new state
+      for controller in newState.controllers:
+        if (controller.id == self.id):
+          controller.pos_x = newX
+          controller.pos_y = newY
+      
+      return newState
         
     def takeAction(self, move, world):
       if (move == "Left"):

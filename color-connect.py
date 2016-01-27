@@ -5,10 +5,14 @@ import agent
 import map
 import visual
 import bfts
+import state
 from sys import argv
 import random
 
 random.seed(0)
+
+
+
 
 def getBestMove(thisMove, bestMove):
   #print("This: " + thisMove[0] + str(thisMove[1]))
@@ -49,6 +53,7 @@ percept = None
 # Keep track of the start and end points
 startPointList = []
 endPointList = []
+
 for i in range(gridSize):
   for j in range(gridSize):
     if grid[i][j].colored is not "e":
@@ -74,6 +79,13 @@ terminationCondition = False
 
 # This is where we do the thinking for the game strategy
 
+# Initial state
+# initialState = State( bfts.Node(grid, None, None, 0), controllerList)
+
+initialState = state.State(grid, controllerList)
+
+rootNode = bfts.Node(initialState, None, None, 0)
+bfts.BFTS(rootNode, actionSet)
 
 
 
@@ -81,6 +93,8 @@ terminationCondition = False
 while (not terminationCondition):
   visual.visualize(grid, gridSize, numberOfColors)
   
+
+  '''
   del colorMoves[:]
   best = None
   for controller in controllerList:
@@ -111,7 +125,7 @@ while (not terminationCondition):
     newY = visual.y + (controllerList[bestIndex].pos_y * visual.boxWidth) + visual.halfBoxWidth
     visual.colorPointList[controllerList[bestIndex].id].append( (newX, newY) )
   else:
-    terminationCondition = True
+    terminationCondition = True'''
   
 print ("No moves remaining. Game over!")
     
