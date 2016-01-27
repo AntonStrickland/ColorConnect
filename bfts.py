@@ -41,7 +41,6 @@ def BFTS(rootNode, actionSet):
     else:
       searching = False
       return currentNode
-      
 
 # Check if all controllers have reached their endpoints
 def CheckSolution(node):
@@ -61,11 +60,10 @@ def ExpandFrontier(node, frontier, actionSet):
       if controller.reachedGoal is False:
         # If this color has not already reached its endpoint and it's a valid action, then add the resulting state to the frontier
         if (controller.checkMoveValidity(action[0], gridSize, gridSize, node.state.board)):
-          newBoard = controller.result(node.state, action[0])
-          newState = node.state.copy()
-          controller.result(newState, action[0])
+          newState = controller.result(node.state, action[0])
           newNode = Node(newState, node.state, action[0], node.pathCost + action[1])
           frontier.put(newNode)
           print("Expanded frontier." + " C: " + str(controller.id) + " M: " + str(action[0]))
+          newState.printBoard()
           
   return

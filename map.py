@@ -2,7 +2,7 @@
 #CS5400 Puzzle Project 1
 
 class Tile():
-  def __init__(self, x, y, c):
+  def __init__(self, y, x, c):
     self.x = x
     self.y = y
     self.colored = c
@@ -17,10 +17,10 @@ def CreateMap(width, height, input):
   index = 3
   world = []
   seenColors = []
-  for i in range(width):
+  for i in range(height):
     world.append([])
-    for j in range(height):
-      newTile = Tile(i, j, input[i+1][j])
+    for j in range(width):
+      newTile = Tile(i, j, input[j+1][i])
       
       if newTile.colored != "e":
         for col in seenColors:

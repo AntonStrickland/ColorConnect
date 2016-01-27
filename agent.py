@@ -55,18 +55,19 @@ class ColorController():
     
       newX = self.pos_x
       newY = self.pos_y
-      
+      print(newX, newY)
+
       if (move == "Left"):
         newX = self.pos_x - 1
-        
-      if (move == "Right"):
+      elif (move == "Right"):
         newX = self.pos_x + 1
-        
-      if (move == "Up"):
+      elif (move == "Up"):
         newY = self.pos_y - 1
-        
-      if (move == "Down"):
+      elif (move == "Down"):
         newY = self.pos_y + 1
+      
+      print("Old: ")
+      newState.printBoard()
       
       # print (str(self.pos_x) + "," + str(self.pos_y))
       newState.board[newX][newY].colored = str(self.id)
@@ -74,8 +75,14 @@ class ColorController():
       # Update the same controller within the new state
       for controller in newState.controllers:
         if (controller.id == self.id):
+          print (controller)
+          print (self)
           controller.pos_x = newX
           controller.pos_y = newY
+      
+      print(newX, newY)
+      print("New: ")
+      newState.printBoard()
       
       return newState
         

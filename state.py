@@ -18,5 +18,5 @@ class State():
     for i in range(len(self.board)):
       s = ""
       for j in range(len(self.board[0])):
-        s += str(self.board[i][j].colored) + " "
+        s += str(self.board[j][i].colored) + " "
       print (s)

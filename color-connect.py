@@ -55,12 +55,15 @@ startPointList = []
 endPointList = []
 
 for i in range(gridSize):
+  s = ""
   for j in range(gridSize):
+    s += str(grid[i][j].colored) + " "
     if grid[i][j].colored is not "e":
       if grid[i][j].startPoint is True:
         startPointList.append((grid[i][j].colored, i, j))
       elif grid[i][j].endPoint is True:
         endPointList.append((grid[i][j].colored, i, j))
+  print(s)
 
 # Create the controllers for each color
 controllerList = []
