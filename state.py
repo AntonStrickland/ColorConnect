@@ -8,8 +8,8 @@ class State():
     self.board = board
     self.controllers = controllers
     
-  def __str__(self):
-    return self.board
+  #def __str__(self):
+  #  return self.board
       
   def copy(self):
       return copy.deepcopy(self)

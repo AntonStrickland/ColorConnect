@@ -57,7 +57,7 @@ endPointList = []
 for i in range(gridSize):
   s = ""
   for j in range(gridSize):
-    s += str(grid[i][j].colored) + " "
+    s += str(grid[j][i].colored) + " "
     if grid[i][j].colored is not "e":
       if grid[i][j].startPoint is True:
         startPointList.append((grid[i][j].colored, i, j))

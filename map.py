@@ -10,17 +10,16 @@ class Tile():
     self.endPoint = False
   
   def __str__(self):
-    return str(self.x) + "," + str(self.y) + ": " + str(self.colored)
+    return str(self.colored)
 
 
-def CreateMap(width, height, input):
-  index = 3
+def CreateMap(width, height, input, offset=1):
   world = []
   seenColors = []
   for i in range(height):
     world.append([])
     for j in range(width):
-      newTile = Tile(i, j, input[j+1][i])
+      newTile = Tile(i, j, input[j+offset][i])
       
       if newTile.colored != "e":
         for col in seenColors:
@@ -31,7 +30,6 @@ def CreateMap(width, height, input):
           seenColors.append(newTile.colored)
       
       world[i].append(newTile)
-      # print (str(i) + "," + str(j) + ": " + str(input[i+1][j]))
-      index = index + 1
+      # print (str(i) + "," + str(j) + ": " + str(input[i+offset][j]))
     
   return world

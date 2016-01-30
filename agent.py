@@ -1,6 +1,9 @@
 #Name: Anton Strickland
 #CS5400 Puzzle Project 1
 
+import state
+import map
+
 class Agent():
 
   def __init__(self):
@@ -51,7 +54,7 @@ class ColorController():
       else:
         return False
         
-    def result(self, newState, move):
+    def result(self, currentState, move):
     
       newX = self.pos_x
       newY = self.pos_y
@@ -66,23 +69,23 @@ class ColorController():
       elif (move == "Down"):
         newY = self.pos_y + 1
       
-      print("Old: ")
-      newState.printBoard()
+      newControllerList = []
+      for controller in currentState.controllers:
+        newController = ColorController(controller.id, controller.pos_x, controller.pos_y)
+        newControllerList.append(newController)
+        
+      gridSize = len(currentState.board[0])
+      newBoard = map.CreateMap(gridSize, gridSize, currentState.board, 0)
+      
+      # Update the same controller within the new state
+      
+      newState = state.State(newBoard, newControllerList)
+      
+      print (currentState)
+      print (newState)
       
       # print (str(self.pos_x) + "," + str(self.pos_y))
       newState.board[newX][newY].colored = str(self.id)
-      
-      # Update the same controller within the new state
-      for controller in newState.controllers:
-        if (controller.id == self.id):
-          print (controller)
-          print (self)
-          controller.pos_x = newX
-          controller.pos_y = newY
-      
-      print(newX, newY)
-      print("New: ")
-      newState.printBoard()
       
       return newState
         
