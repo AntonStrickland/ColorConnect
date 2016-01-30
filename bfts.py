@@ -33,12 +33,12 @@ def BFTS(rootNode, actionSet):
     # Check to see if this state is the solution
     currentNode = frontier.get()
     print("Checking state...") #+ str(currentNode.state.board))
-    currentNode.state.printBoard()
+    # currentNode.state.printBoard()
     solutionFound = CheckSolution(currentNode)
     
     # If a solution has not been found, then expand the frontier
     if (not solutionFound):
-      print("Solution not found. Checking frontier.")
+      print("Solution not found. Expanding frontier.")
       ExpandFrontier(currentNode, frontier, actionSet)
       visual.drawFrontier(currentNode)
     else:

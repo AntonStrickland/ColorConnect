@@ -56,28 +56,32 @@ def drawFrontier(currentNode):
   y = 100
   index = 0
   
-  drawBoard(currentNode.state.board, 320, 25, currentNode.state.pointsList)
+  delayTime = 1
   
+  drawBoard(currentNode.state.board, 320, 25, currentNode.state.pointsList)
+  pygame.display.update()
+  pygame.time.delay(delayTime)
+    
   for node in frontierList:
     # update the screen
     if (index > 5):
       index = 0
       x = x + 100
       y = 100
-    print (node.state.pointsList)
+    # print (node.state.pointsList)
     drawBoard(node.state.board, x, y, node.state.pointsList)
     y = y + 50
     index = index + 1
     
     pygame.display.update()
-    pygame.time.delay(1000)
+    pygame.time.delay(delayTime)
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         pygame.quit()
         sys.exit()
         
   del frontierList[:]
-  pygame.time.delay(1000)
+  pygame.time.delay(delayTime)
     
 
 def drawBoard(board, x=100, y=100, pointsList=None):

@@ -39,11 +39,11 @@ class Agent():
     
 class ColorController():
 
-    def __init__(self, id, startX, startY):
+    def __init__(self, id, startX, startY, goal=False):
       self.id = int(id)
       self.pos_x = startX
       self.pos_y = startY
-      self.reachedGoal = False
+      self.reachedGoal = goal
       
     def checkColorConnect(self, newPos):
       if (newPos.colored == "e"):
@@ -73,7 +73,10 @@ class ColorController():
       # Copy and update the same controller within the new state
       newControllerList = []
       for controller in currentState.controllers:
-        newController = ColorController(controller.id, controller.pos_x, controller.pos_y)
+        newController = ColorController(controller.id, controller.pos_x, controller.pos_y, controller.reachedGoal)
+        if (newController.id == self.id):
+          newController.pos_x = newX
+          newController.pos_y = newY
         newControllerList.append(newController)
       
       # Copy and update the game board
@@ -93,7 +96,7 @@ class ColorController():
           newState.pointsList[colors].append(points)
       
       # Add new point to the point list
-      print (self.id)
+      # print (self.id)
       newState.pointsList[self.id].append( (newX, newY) )
       
       #currentState.printBoard()

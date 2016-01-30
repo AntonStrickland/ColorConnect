@@ -20,17 +20,18 @@ def CreateMap(width, height, input, offset=1):
     world.append([])
     for j in range(width):
       newTile = Tile(i, j, input[j+offset][i])
-      
-      if newTile.colored != "e":
-        for col in seenColors:
-          if col == newTile.colored:
-            newTile.endPoint = True
-        if newTile.endPoint is not True:
-          newTile.startPoint = True
-          seenColors.append(newTile.colored)
-      
       world[i].append(newTile)
       # print (str(i) + "," + str(j) + ": " + str(input[i+offset][j]))
+      
+  for j in range(height):
+    for i in range(width):
+      if world[i][j].colored != "e":
+        for col in seenColors:
+          if col == world[i][j].colored:
+            world[i][j].endPoint = True
+        if world[i][j].endPoint is not True:
+          world[i][j].startPoint = True
+          seenColors.append(world[i][j].colored)
     
   return world
   
