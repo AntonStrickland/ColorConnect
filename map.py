@@ -39,10 +39,10 @@ def CopyMap(width, height, input):
   for i in range(height):
     world.append([])
     for j in range(width):
-      newTile = Tile(i, j, input[j][i].colored)
-      newTile.endPoint = input[j][i].endPoint
-      newTile.startPoint = input[j][i].startPoint
+      newTile = Tile(i, j, input[i][j].colored)
+      newTile.endPoint = input[i][j].endPoint
+      newTile.startPoint = input[i][j].startPoint
       world[i].append(newTile)
-      # print (str(i) + "," + str(j) + ": " + str(input[i+offset][j]))
+      # print (str(i) + "," + str(j) + ": " + str(input[i][j]))
     
   return world

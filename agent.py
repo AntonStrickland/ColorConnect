@@ -95,6 +95,10 @@ class ColorController():
       # Add new point to the point list
       print (self.id)
       newState.pointsList[self.id].append( (newX, newY) )
+      
+      #currentState.printBoard()
+      #print("---")
+      #newState.printBoard()
 
       return newState
         
