@@ -45,9 +45,7 @@ def setupColors(grid, gridSize, numberOfColors):
   for i in range(gridSize):
     for j in range(gridSize):
       if grid[i][j].colored is not "e" and grid[i][j].startPoint is True:
-        newX = x + (grid[i][j].x * boxWidth) + halfBoxWidth
-        newY = y + (grid[i][j].y * boxWidth) + halfBoxWidth
-        colorPointList[int(grid[i][j].colored)].append((newX, newY))
+        colorPointList[int(grid[i][j].colored)].append((grid[i][j].y, grid[i][j].x))
         
         
 def drawFrontier(currentNode):
@@ -107,7 +105,6 @@ def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, pointsList=None):
       else:
         currentColor = colorList[int(currentColor)]
        
-      
       if board[i][j].startPoint is True or board[i][j].endPoint is True:
         pygame.draw.circle(screen, currentColor, (x+(boxWidth*i)+halfBoxWidth,y+(boxWidth*j)+halfBoxWidth), circleRadius, thickness)
       #else:
@@ -116,20 +113,13 @@ def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, pointsList=None):
   newPointsList = []
   for color in range(len(pointsList)):
     newPointsList.append([])
-    # print (pointsList)
-    # print(pointsList[color])
-    # print(newPointsList)
     for i in range(len(pointsList[color])):
         newTuple = (x + (pointsList[color][i][0] * boxWidth) + halfBoxWidth, y + (pointsList[color][i][1] * boxWidth) + halfBoxWidth)
         newPointsList[color].append(newTuple) 
-    # print ("\nDrawing lines")
     if (len(newPointsList[color]) > 1):
-      # print(newPointsList[color])
       pygame.draw.lines(screen, colorList[color], False, newPointsList[color], quarterBox)
-    # print("\nOriginal list:")
-    # print (pointsList)
-  
-def visualize(grid, gridSize, numberOfColors, solutionNode):
+
+def visualize(grid, gridSize, numberOfColors):
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       pygame.quit()
@@ -137,9 +127,10 @@ def visualize(grid, gridSize, numberOfColors, solutionNode):
       
 
   screen.fill(colorBlack)
-  drawBoard(grid, 50, 25, 100, 100, solutionNode)
+  print(colorPointList)
+  drawBoard(grid, 50, 24, 100, 100, colorPointList)
   
   # update the screen
   pygame.display.update()
-  pygame.time.delay(250)
+  pygame.time.delay(500)
   

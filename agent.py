@@ -49,7 +49,6 @@ class ColorController():
       if (newPos.colored == "e"):
         return True
       elif (newPos.colored == str(self.id) and newPos.endPoint is True):
-        self.reachedGoal = True
         return True
       else:
         return False
@@ -69,6 +68,12 @@ class ColorController():
         newY = self.pos_y + 1
       else:
         return None
+        
+        
+      # Copy and update the game board
+      gridSize = len(currentState.board[0])
+      newBoard = []
+      newBoard = map.CopyMap(gridSize, gridSize, currentState.board)
       
       # Copy and update the same controller within the new state
       newControllerList = []
@@ -77,15 +82,13 @@ class ColorController():
         if (newController.id == self.id):
           newController.pos_x = newX
           newController.pos_y = newY
+          if (newBoard[newX][newY].endPoint is True):
+            newController.reachedGoal = True
         newControllerList.append(newController)
       
-      # Copy and update the game board
-      gridSize = len(currentState.board[0])
-      newBoard = []
-      newBoard = map.CopyMap(gridSize, gridSize, currentState.board)
 
-      newState = state.State(newBoard, newControllerList)
-      
+
+      newState = state.State(newBoard, newControllerList)    
       newState.board[newX][newY].colored = str(self.id)
       
       # Copy the point list
@@ -98,6 +101,8 @@ class ColorController():
       # Add new point to the point list
       # print (self.id)
       newState.pointsList[self.id].append( (newX, newY) )
+      
+      
       
       #currentState.printBoard()
       #print("---")
@@ -120,7 +125,7 @@ class ColorController():
       
       # print (str(self.pos_x) + "," + str(self.pos_y))
       world[self.pos_x][self.pos_y].colored = str(self.id)
-      return
+      return self.pos_x, self.pos_y
       
     def checkMoveValidity(self, move, maxWidth, maxHeight, world):
 

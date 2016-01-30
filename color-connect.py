@@ -94,46 +94,29 @@ for color in range(numberOfColors):
 
 rootNode = bfts.Node(initialState, None, None, 0)
 solutionNode = bfts.BFTS(rootNode, actionSet)
-# bfts.getSolutionPath(solutionNode)
+solutionPath = bfts.getSolutionPath(solutionNode)
+print(solutionPath)
 
-
+pathIndex = len(solutionPath)-1
 # Carry out the best strategy we've found
 while (not terminationCondition):
   visual.visualize(grid, gridSize, numberOfColors)
   
+  if (pathIndex < 0):
+    terminationCondition = True
+    
+    
+  if (solutionPath[pathIndex].action is not None):
+    controllerNumber = solutionPath[pathIndex].action[1]
+    newX, newY = controllerList[controllerNumber].takeAction(solutionPath[pathIndex].action[0], grid)
+    print(solutionPath[pathIndex].action)
+    visual.colorPointList[controllerList[controllerNumber].id].append( (newX, newY) )
+    
+  pathIndex = pathIndex - 1
+  # newX = visual.x + (controllerList[controllerNumber].pos_x * visual.boxWidth) + visual.halfBoxWidth
+  # newY = visual.y + (controllerList[controllerNumber].pos_y * visual.boxWidth) + visual.halfBoxWidth
+  
 
-  '''
-  del colorMoves[:]
-  best = None
-  for controller in controllerList:
-    if controller.reachedGoal is False:
-      for move in actionSet:
-        if (controller.checkMoveValidity(move[0], gridSize, gridSize, grid)):
-          # print("Valid: " + move[0])
-          validList.append(move)
-          if (best is None):
-            best = move
-          best = getBestMove(move, best)
-    colorMoves.append(best)
-  # print("Best move among the colors:")
-  # print (colorMoves)
-  for move in colorMoves:
-    if (best is None):
-      best = move
-    if (move is not None):
-      best = getBestMove(move, best)
-  
-  bestIndex = colorMoves.index(best)
-  
-  # If there is a move to be made, then make the best one. Else, end the game in failure.
-  if (best is not None):
-    controllerList[bestIndex].takeAction(best[0], grid)
-        
-    newX = visual.x + (controllerList[bestIndex].pos_x * visual.boxWidth) + visual.halfBoxWidth
-    newY = visual.y + (controllerList[bestIndex].pos_y * visual.boxWidth) + visual.halfBoxWidth
-    visual.colorPointList[controllerList[bestIndex].id].append( (newX, newY) )
-  else:
-    terminationCondition = True'''
   
 print ("No moves remaining. Game over!")
     

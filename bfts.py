@@ -16,7 +16,7 @@ class Node():
       self.pathCost = cost
 
     def __str__(self):
-      return self.state
+      return "this is a node"
       
 def BFTS(rootNode, actionSet):
 
@@ -52,6 +52,7 @@ def BFTS(rootNode, actionSet):
       searching = False
       print("Total nodes:" + str(totalNodes))
       print("Elapsed time:" + str(elapsedTime))
+      print (currentNode)
       return currentNode
 
 # Check if all controllers have reached their endpoints
@@ -61,6 +62,21 @@ def CheckSolution(node):
           return False
   print("Solution found!")
   return True
+  
+def getSolutionPath(node):
+  print(node)
+  solutionPath = addToPath(node, [])
+  return solutionPath
+  
+  
+def addToPath(node, path):
+  node.state.printBoard()
+  print("---")
+  path.append(node)
+  if (node.parent is not None):
+    addToPath(node.parent, path)
+  return path
+  
       
 def ExpandFrontier(node, frontier, actionSet, totalNodes):
   # For each possible action that can be taken by each possible color controller
@@ -74,7 +90,7 @@ def ExpandFrontier(node, frontier, actionSet, totalNodes):
         if (controller.checkMoveValidity(action[0], gridSize, gridSize, node.state.board)):
           newState = controller.result(node.state, action[0])
           if (newState is not None):
-            newNode = Node(newState, node.state, action[0], node.pathCost + action[1])
+            newNode = Node(newState, node, (action[0], controller.id), node.pathCost + action[1])
             frontier.put(newNode)
             totalNodes = totalNodes + 1
             # visual.frontierList.append(newNode)
