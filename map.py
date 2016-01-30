@@ -33,3 +33,16 @@ def CreateMap(width, height, input, offset=1):
       # print (str(i) + "," + str(j) + ": " + str(input[i+offset][j]))
     
   return world
+  
+def CopyMap(width, height, input):
+  world = []
+  for i in range(height):
+    world.append([])
+    for j in range(width):
+      newTile = Tile(i, j, input[j][i].colored)
+      newTile.endPoint = input[j][i].endPoint
+      newTile.startPoint = input[j][i].startPoint
+      world[i].append(newTile)
+      # print (str(i) + "," + str(j) + ": " + str(input[i+offset][j]))
+    
+  return world

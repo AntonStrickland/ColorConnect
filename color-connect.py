@@ -86,6 +86,11 @@ terminationCondition = False
 # initialState = State( bfts.Node(grid, None, None, 0), controllerList)
 
 initialState = state.State(grid, controllerList)
+for color in range(numberOfColors):
+  initialState.pointsList.append( [] )
+  initialState.pointsList[color].append((startPointList[color][1] , startPointList[color][2]))
+  
+print (initialState.pointsList)
 
 rootNode = bfts.Node(initialState, None, None, 0)
 bfts.BFTS(rootNode, actionSet)

@@ -58,7 +58,6 @@ class ColorController():
     
       newX = self.pos_x
       newY = self.pos_y
-      print(newX, newY)
 
       if (move == "Left"):
         newX = self.pos_x - 1
@@ -68,25 +67,34 @@ class ColorController():
         newY = self.pos_y - 1
       elif (move == "Down"):
         newY = self.pos_y + 1
+      else:
+        return None
       
+      # Copy and update the same controller within the new state
       newControllerList = []
       for controller in currentState.controllers:
         newController = ColorController(controller.id, controller.pos_x, controller.pos_y)
         newControllerList.append(newController)
-        
+      
+      # Copy and update the game board
       gridSize = len(currentState.board[0])
-      newBoard = map.CreateMap(gridSize, gridSize, currentState.board, 0)
-      
-      # Update the same controller within the new state
-      
+      newBoard = []
+      newBoard = map.CopyMap(gridSize, gridSize, currentState.board)
+
       newState = state.State(newBoard, newControllerList)
       
-      print (currentState)
-      print (newState)
-      
-      # print (str(self.pos_x) + "," + str(self.pos_y))
       newState.board[newX][newY].colored = str(self.id)
       
+      # Copy the point list
+      numberOfColors = len(currentState.pointsList)
+      for colors in range(numberOfColors):
+        newState.pointsList.append([])
+        for points in currentState.pointsList[colors]:
+          newState.pointsList[colors].append(points)
+      
+      # Add new point to the point list
+      newState.pointsList[self.id].append( (newX, newY) )
+
       return newState
         
     def takeAction(self, move, world):

@@ -7,6 +7,7 @@ class State():
   def __init__(self, board, controllers):
     self.board = board
     self.controllers = controllers
+    self.pointsList = []
     
   #def __str__(self):
   #  return self.board

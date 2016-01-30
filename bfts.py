@@ -2,6 +2,7 @@
 #CS5400 Puzzle Project 1
 import queue
 import state
+import visual
 
 class Node():
 
@@ -37,7 +38,9 @@ def BFTS(rootNode, actionSet):
     
     # If a solution has not been found, then expand the frontier
     if (not solutionFound):
+      print("Solution not found. Checking frontier.")
       ExpandFrontier(currentNode, frontier, actionSet)
+      visual.drawFrontier()
     else:
       searching = False
       return currentNode
@@ -56,14 +59,16 @@ def ExpandFrontier(node, frontier, actionSet):
   gridSize = len(node.state.board)
   for controller in node.state.controllers:
     for action in actionSet:
-      print ("Testing " +  str(controller.id) + " " + str(action[0]))
+      # print ("Testing " +  str(controller.id) + " " + str(action[0]))
       if controller.reachedGoal is False:
         # If this color has not already reached its endpoint and it's a valid action, then add the resulting state to the frontier
         if (controller.checkMoveValidity(action[0], gridSize, gridSize, node.state.board)):
           newState = controller.result(node.state, action[0])
-          newNode = Node(newState, node.state, action[0], node.pathCost + action[1])
-          frontier.put(newNode)
-          print("Expanded frontier." + " C: " + str(controller.id) + " M: " + str(action[0]))
-          newState.printBoard()
+          if (newState is not None):
+            newNode = Node(newState, node.state, action[0], node.pathCost + action[1])
+            frontier.put(newNode)
+            visual.frontierList.append(newNode)
+            # print("Expanded frontier." + str(controller.id) + str(action[0]))
+            # newState.printBoard()
           
   return
