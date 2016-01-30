@@ -90,11 +90,11 @@ for color in range(numberOfColors):
   initialState.pointsList.append( [] )
   initialState.pointsList[color].append((startPointList[color][1] , startPointList[color][2]))
   
-print (initialState.pointsList)
+# print (initialState.pointsList)
 
 rootNode = bfts.Node(initialState, None, None, 0)
-bfts.BFTS(rootNode, actionSet)
-
+solutionNode = bfts.BFTS(rootNode, actionSet)
+# bfts.getSolutionPath(solutionNode)
 
 
 # Carry out the best strategy we've found

@@ -3,6 +3,9 @@
 import queue
 import state
 import visual
+import time
+
+totalNodes = 1
 
 class Node():
 
@@ -18,12 +21,15 @@ class Node():
 def BFTS(rootNode, actionSet):
 
   print("Finding solution...")
+  
+  startTime = time.time()
   solutionFound = False
   searching = True
   currentNode = rootNode
 
   frontier = queue.Queue()
   frontier.put(rootNode)
+  totalNodes = 1
 
   while (searching):
     if (frontier.empty()):
@@ -32,17 +38,20 @@ def BFTS(rootNode, actionSet):
     
     # Check to see if this state is the solution
     currentNode = frontier.get()
-    print("Checking state...") #+ str(currentNode.state.board))
+    # print("Checking state...") #+ str(currentNode.state.board))
     # currentNode.state.printBoard()
     solutionFound = CheckSolution(currentNode)
     
     # If a solution has not been found, then expand the frontier
     if (not solutionFound):
-      print("Solution not found. Expanding frontier.")
-      ExpandFrontier(currentNode, frontier, actionSet)
-      visual.drawFrontier(currentNode)
+      # print("Solution not found. Expanding frontier.")
+      totalNodes = ExpandFrontier(currentNode, frontier, actionSet, totalNodes)
+      # visual.drawFrontier(currentNode)
     else:
+      elapsedTime = time.time() - startTime
       searching = False
+      print("Total nodes:" + str(totalNodes))
+      print("Elapsed time:" + str(elapsedTime))
       return currentNode
 
 # Check if all controllers have reached their endpoints
@@ -53,7 +62,7 @@ def CheckSolution(node):
   print("Solution found!")
   return True
       
-def ExpandFrontier(node, frontier, actionSet):
+def ExpandFrontier(node, frontier, actionSet, totalNodes):
   # For each possible action that can be taken by each possible color controller
   # print("Expand frontier!")
   gridSize = len(node.state.board)
@@ -67,8 +76,9 @@ def ExpandFrontier(node, frontier, actionSet):
           if (newState is not None):
             newNode = Node(newState, node.state, action[0], node.pathCost + action[1])
             frontier.put(newNode)
-            visual.frontierList.append(newNode)
+            totalNodes = totalNodes + 1
+            # visual.frontierList.append(newNode)
             # print("Expanded frontier." + str(controller.id) + str(action[0]))
             # newState.printBoard()
           
-  return
+  return totalNodes

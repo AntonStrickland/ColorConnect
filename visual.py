@@ -27,8 +27,7 @@ frontierList = []
 
 thickness = 0
 
-boxWidth = 10
-halfBoxWidth = 5
+
 
 pygame.display.update()
 
@@ -36,6 +35,8 @@ def setupColors(grid, gridSize, numberOfColors):
 
   x = 100
   y = 100
+  boxWidth = 10
+  halfBoxWidth = 5
 
   # Create a list of points for each color
   for c in range(numberOfColors):
@@ -56,9 +57,9 @@ def drawFrontier(currentNode):
   y = 100
   index = 0
   
-  delayTime = 1
-  
-  drawBoard(currentNode.state.board, 320, 25, currentNode.state.pointsList)
+  delayTime = 0
+
+  drawBoard(currentNode.state.board, 50, 25, 200, 100, currentNode.state.pointsList)
   pygame.display.update()
   pygame.time.delay(delayTime)
     
@@ -69,7 +70,7 @@ def drawFrontier(currentNode):
       x = x + 100
       y = 100
     # print (node.state.pointsList)
-    drawBoard(node.state.board, x, y, node.state.pointsList)
+    drawBoard(node.state.board, 10, 5, x, y, node.state.pointsList)
     y = y + 50
     index = index + 1
     
@@ -84,8 +85,10 @@ def drawFrontier(currentNode):
   pygame.time.delay(delayTime)
     
 
-def drawBoard(board, x=100, y=100, pointsList=None):
+def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, pointsList=None):
   colorBGIndex = 0
+  quarterBox = int(halfBoxWidth*0.5)
+  circleRadius = int(halfBoxWidth*0.75)
   gridSize = len(board)
   for i in range(gridSize):
     colorBGIndex = colorBGIndex + 1
@@ -106,7 +109,7 @@ def drawBoard(board, x=100, y=100, pointsList=None):
        
       
       if board[i][j].startPoint is True or board[i][j].endPoint is True:
-        pygame.draw.circle(screen, currentColor, (x+(boxWidth*i)+halfBoxWidth,y+(boxWidth*j)+halfBoxWidth), halfBoxWidth, thickness)
+        pygame.draw.circle(screen, currentColor, (x+(boxWidth*i)+halfBoxWidth,y+(boxWidth*j)+halfBoxWidth), circleRadius, thickness)
       #else:
       # pygame.draw.rect(screen, currentColor, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
   
@@ -122,11 +125,11 @@ def drawBoard(board, x=100, y=100, pointsList=None):
     # print ("\nDrawing lines")
     if (len(newPointsList[color]) > 1):
       # print(newPointsList[color])
-      pygame.draw.lines(screen, colorList[color], False, newPointsList[color], 2)
+      pygame.draw.lines(screen, colorList[color], False, newPointsList[color], quarterBox)
     # print("\nOriginal list:")
     # print (pointsList)
   
-def visualize(grid, gridSize, numberOfColors):
+def visualize(grid, gridSize, numberOfColors, solutionNode):
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       pygame.quit()
@@ -134,7 +137,7 @@ def visualize(grid, gridSize, numberOfColors):
       
 
   screen.fill(colorBlack)
-  drawBoard(grid, gridSize)
+  drawBoard(grid, 50, 25, 100, 100, solutionNode)
   
   # update the screen
   pygame.display.update()
