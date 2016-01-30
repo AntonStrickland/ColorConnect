@@ -40,7 +40,7 @@ def BFTS(rootNode, actionSet):
     if (not solutionFound):
       print("Solution not found. Checking frontier.")
       ExpandFrontier(currentNode, frontier, actionSet)
-      visual.drawFrontier()
+      visual.drawFrontier(currentNode)
     else:
       searching = False
       return currentNode

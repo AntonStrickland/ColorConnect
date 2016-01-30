@@ -49,12 +49,15 @@ def setupColors(grid, gridSize, numberOfColors):
         colorPointList[int(grid[i][j].colored)].append((newX, newY))
         
         
-def drawFrontier():
+def drawFrontier(currentNode):
 
   screen.fill(colorBlack)
   x = 100
   y = 100
   index = 0
+  
+  drawBoard(currentNode.state.board, 320, 25, currentNode.state.pointsList)
+  
   for node in frontierList:
     # update the screen
     if (index > 5):
@@ -67,13 +70,14 @@ def drawFrontier():
     index = index + 1
     
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         pygame.quit()
         sys.exit()
         
   del frontierList[:]
+  pygame.time.delay(1000)
     
 
 def drawBoard(board, x=100, y=100, pointsList=None):
@@ -111,12 +115,12 @@ def drawBoard(board, x=100, y=100, pointsList=None):
     for i in range(len(pointsList[color])):
         newTuple = (x + (pointsList[color][i][0] * boxWidth) + halfBoxWidth, y + (pointsList[color][i][1] * boxWidth) + halfBoxWidth)
         newPointsList[color].append(newTuple) 
-    print ("\nDrawing lines")
+    # print ("\nDrawing lines")
     if (len(newPointsList[color]) > 1):
-      print(newPointsList[color])
+      # print(newPointsList[color])
       pygame.draw.lines(screen, colorList[color], False, newPointsList[color], 2)
-    print("\nOriginal list:")
-    print (pointsList)
+    # print("\nOriginal list:")
+    # print (pointsList)
   
 def visualize(grid, gridSize, numberOfColors):
   for event in pygame.event.get():
