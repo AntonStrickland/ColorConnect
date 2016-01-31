@@ -2,6 +2,8 @@
 #CS5400 Puzzle Project 1
 
 class Tile():
+  __slots__ = ['x', 'y', 'colored', 'startPoint', 'endPoint']
+  
   def __init__(self, y, x, c):
     self.x = x
     self.y = y

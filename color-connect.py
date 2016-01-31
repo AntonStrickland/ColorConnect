@@ -8,25 +8,10 @@ import bfts
 import state
 from sys import argv
 import random
+import time
 
-random.seed(0)
-
-
-
-
-def getBestMove(thisMove, bestMove):
-  #print("This: " + thisMove[0] + str(thisMove[1]))
-  #print("Best: " + bestMove[0] + str(bestMove[1]))
-  if (thisMove[1] > bestMove[1]):
-    bestMove = thisMove
-  elif (thisMove[1] == bestMove[1]):
-    if (random.random() < 0.5):
-      bestMove = thisMove
-  # print("Winner: " + bestMove[0] + str(bestMove[1]))
-  return bestMove
+random.seed()
   
-
-
 # Set config filepath
 cfgPath = ''
 if len(argv) < 2:
@@ -46,9 +31,6 @@ with open(cfgPath) as input:
 gridSize = int(gridInput[0][0])
 numberOfColors = int(gridInput[0][1])
 grid = map.CreateMap(gridSize, gridSize, gridInput)
-
-myAgent = agent.Agent()
-percept = None
 
 # Keep track of the start and end points
 startPointList = []
@@ -73,51 +55,57 @@ for c in range(numberOfColors):
 # action = myAgent.Action(percept)
 
 actionSet = [("Left", 1), ("Right", 1), ("Up", 1), ("Down", 1)]
-validList = []
-colorMoves = []
-
-visual.setupColors(grid, gridSize, numberOfColors)
-
 terminationCondition = False
 
 # This is where we do the thinking for the game strategy
 
 # Initial state
-# initialState = State( bfts.Node(grid, None, None, 0), controllerList)
-
 initialState = state.State(grid, controllerList)
-for color in range(numberOfColors):
-  initialState.pointsList.append( [] )
-  initialState.pointsList[color].append((startPointList[color][1] , startPointList[color][2]))
+#for color in range(numberOfColors):
+#  initialState.pointsList.append( [] )
+#  initialState.pointsList[color].append((startPointList[color][1] , startPointList[color][2]))
   
-# print (initialState.pointsList)
-
 rootNode = bfts.Node(initialState, None, None, 0)
+startTime = time.time()
 solutionNode = bfts.BFTS(rootNode, actionSet)
+elapsedTime = time.time() - startTime
+print("Elapsed time:" + str(elapsedTime))
 solutionPath = bfts.getSolutionPath(solutionNode)
-print(solutionPath)
+# print(solutionPath)
 
 pathIndex = len(solutionPath)-1
-# Carry out the best strategy we've found
+
+visual.initialize(grid, gridSize, numberOfColors)
+
+# Carry out the strategy we've found
 while (not terminationCondition):
   visual.visualize(grid, gridSize, numberOfColors)
   
   if (pathIndex < 0):
     terminationCondition = True
     
-    
   if (solutionPath[pathIndex].action is not None):
     controllerNumber = solutionPath[pathIndex].action[1]
     newX, newY = controllerList[controllerNumber].takeAction(solutionPath[pathIndex].action[0], grid)
-    print(solutionPath[pathIndex].action)
+    # print(solutionPath[pathIndex].action)
     visual.colorPointList[controllerList[controllerNumber].id].append( (newX, newY) )
     
   pathIndex = pathIndex - 1
-  # newX = visual.x + (controllerList[controllerNumber].pos_x * visual.boxWidth) + visual.halfBoxWidth
-  # newY = visual.y + (controllerList[controllerNumber].pos_y * visual.boxWidth) + visual.halfBoxWidth
-  
-
   
 print ("No moves remaining. Game over!")
+
+with open("output/solution.txt",'w+') as output:
+  output.write(str(elapsedTime*1000000) + "\n")
+  pathIndex = len(solutionPath)-2
+  controllerNumber = solutionPath[pathIndex].action[1]
+  outputString = str(controllerNumber) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_x) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_y)
+  output.write(outputString)
+  pathIndex = pathIndex - 1
+  while pathIndex > -1:
+    controllerNumber = solutionPath[pathIndex].action[1]
+    outputString =  ", " + str(controllerNumber) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_x) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_y)
+    output.write(outputString)
+    pathIndex = pathIndex - 1
+  output.write("\n" + solutionPath[0].state.returnBoard())
     
     

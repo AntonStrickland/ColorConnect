@@ -3,12 +3,13 @@
 import queue
 import state
 import visual
-import time
+import gc
 
 totalNodes = 1
 
 class Node():
-
+    __slots__ = ['state', 'parent', 'action', 'pathCost']
+    
     def __init__(self, state, parent, action, cost):
       self.state = state
       self.parent = parent
@@ -22,7 +23,7 @@ def BFTS(rootNode, actionSet):
 
   print("Finding solution...")
   
-  startTime = time.time()
+  gc.enable()
   solutionFound = False
   searching = True
   currentNode = rootNode
@@ -48,13 +49,12 @@ def BFTS(rootNode, actionSet):
       totalNodes = ExpandFrontier(currentNode, frontier, actionSet, totalNodes)
       # visual.drawFrontier(currentNode)
     else:
-      elapsedTime = time.time() - startTime
       searching = False
       print("Total nodes:" + str(totalNodes))
-      print("Elapsed time:" + str(elapsedTime))
-      print (currentNode)
+      # print (currentNode)
       return currentNode
-
+    gc.collect(0)
+    
 # Check if all controllers have reached their endpoints
 def CheckSolution(node):
   for controller in node.state.controllers:
@@ -64,14 +64,14 @@ def CheckSolution(node):
   return True
   
 def getSolutionPath(node):
-  print(node)
+  #print(node)
   solutionPath = addToPath(node, [])
   return solutionPath
   
   
 def addToPath(node, path):
-  node.state.printBoard()
-  print("---")
+  #node.state.printBoard()
+  #print("---")
   path.append(node)
   if (node.parent is not None):
     addToPath(node.parent, path)
@@ -80,11 +80,9 @@ def addToPath(node, path):
       
 def ExpandFrontier(node, frontier, actionSet, totalNodes):
   # For each possible action that can be taken by each possible color controller
-  # print("Expand frontier!")
   gridSize = len(node.state.board)
   for controller in node.state.controllers:
     for action in actionSet:
-      # print ("Testing " +  str(controller.id) + " " + str(action[0]))
       if controller.reachedGoal is False:
         # If this color has not already reached its endpoint and it's a valid action, then add the resulting state to the frontier
         if (controller.checkMoveValidity(action[0], gridSize, gridSize, node.state.board)):
@@ -94,7 +92,5 @@ def ExpandFrontier(node, frontier, actionSet, totalNodes):
             frontier.put(newNode)
             totalNodes = totalNodes + 1
             # visual.frontierList.append(newNode)
-            # print("Expanded frontier." + str(controller.id) + str(action[0]))
-            # newState.printBoard()
           
   return totalNodes

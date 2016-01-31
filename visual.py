@@ -4,10 +4,9 @@
 import pygame
 import sys 
 
-pygame.init()
 
-screen = pygame.display.set_mode((640,480))
 
+  
 color = (255,0,0)
 
 colorRed = (255,0,0)
@@ -26,17 +25,17 @@ colorPointList = []
 frontierList = []
 
 thickness = 0
+screen = pygame.display.set_mode((640,480))
 
-
-
-pygame.display.update()
-
-def setupColors(grid, gridSize, numberOfColors):
+def initialize(grid, gridSize, numberOfColors):
 
   x = 100
   y = 100
   boxWidth = 10
   halfBoxWidth = 5
+  
+  pygame.init()
+  pygame.display.update()
 
   # Create a list of points for each color
   for c in range(numberOfColors):
@@ -125,9 +124,8 @@ def visualize(grid, gridSize, numberOfColors):
       pygame.quit()
       sys.exit()
       
-
   screen.fill(colorBlack)
-  print(colorPointList)
+  # print(colorPointList)
   drawBoard(grid, 50, 24, 100, 100, colorPointList)
   
   # update the screen

@@ -3,41 +3,11 @@
 
 import state
 import map
-
-class Agent():
-
-  def __init__(self):
-    pass
-
-  def Action(self, percept):
-    state = self.UpdateState(state, percept)
-    if seq is None:
-      goal = FormulateGoal(state)
-      problem = FormulateProblem(state, goal)
-      seq = Search(problem)
-      if seq == "Failure":
-        return None
-      
-    action = First(seq)
-    seq = Rest(seq)
-    
-    return action
-    
-  def UpdateState(state, percept):
-    pass
-    
-  def FormulateGoal(state):
-    pass
-  
-  def FormulateProblem(state, goal):
-    pass
-    
-  def Search(problem):
-    pass
-    
   
     
 class ColorController():
+
+    __slots__ = ['id', 'pos_x', 'pos_y', 'reachedGoal']
 
     def __init__(self, id, startX, startY, goal=False):
       self.id = int(id)
@@ -92,15 +62,15 @@ class ColorController():
       newState.board[newX][newY].colored = str(self.id)
       
       # Copy the point list
-      numberOfColors = len(currentState.pointsList)
-      for colors in range(numberOfColors):
-        newState.pointsList.append([])
-        for points in currentState.pointsList[colors]:
-          newState.pointsList[colors].append(points)
+      #numberOfColors = len(currentState.pointsList)
+      #for colors in range(numberOfColors):
+      #  newState.pointsList.append([])
+      #  for points in currentState.pointsList[colors]:
+      #    newState.pointsList[colors].append(points)
       
       # Add new point to the point list
       # print (self.id)
-      newState.pointsList[self.id].append( (newX, newY) )
+      # newState.pointsList[self.id].append( (newX, newY) )
       
       
       
