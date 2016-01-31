@@ -4,9 +4,6 @@
 import pygame
 import sys 
 
-
-
-  
 color = (255,0,0)
 
 colorRed = (255,0,0)
@@ -47,7 +44,7 @@ def initialize(grid, gridSize, numberOfColors):
         colorPointList[int(grid[i][j].colored)].append((grid[i][j].y, grid[i][j].x))
         
         
-def drawFrontier(currentNode):
+def drawFrontier(currentNode, gameboard, totalNodes):
 
   screen.fill(colorBlack)
   x = 100
@@ -55,8 +52,12 @@ def drawFrontier(currentNode):
   index = 0
   
   delayTime = 0
+  if (totalNodes > 10000):
+    delayTime = 0
+  if (totalNodes > 100000):
+    delayTime = 5
 
-  drawBoard(currentNode.state.board, 50, 25, 200, 100, currentNode.state.pointsList)
+  drawBoard(gameboard, 50, 25, 200, 100, currentNode.state.controllers)
   pygame.display.update()
   pygame.time.delay(delayTime)
     
@@ -67,7 +68,7 @@ def drawFrontier(currentNode):
       x = x + 100
       y = 100
     # print (node.state.pointsList)
-    drawBoard(node.state.board, 10, 5, x, y, node.state.pointsList)
+    drawBoard(gameboard, 10, 5, x, y, node.state.controllers, False)
     y = y + 50
     index = index + 1
     
@@ -82,7 +83,7 @@ def drawFrontier(currentNode):
   pygame.time.delay(delayTime)
     
 
-def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, pointsList=None):
+def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, controllers=None, printf=True):
   colorBGIndex = 0
   quarterBox = int(halfBoxWidth*0.5)
   circleRadius = int(halfBoxWidth*0.75)
@@ -110,13 +111,15 @@ def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, pointsList=None):
       # pygame.draw.rect(screen, currentColor, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
   
   newPointsList = []
-  for color in range(len(pointsList)):
+  for control in controllers:
     newPointsList.append([])
-    for i in range(len(pointsList[color])):
-        newTuple = (x + (pointsList[color][i][0] * boxWidth) + halfBoxWidth, y + (pointsList[color][i][1] * boxWidth) + halfBoxWidth)
-        newPointsList[color].append(newTuple) 
-    if (len(newPointsList[color]) > 1):
-      pygame.draw.lines(screen, colorList[color], False, newPointsList[color], quarterBox)
+    #if (printf is True):
+      #print(control.points)
+    for i in range(len(control.points)):
+        newTuple = (x + (control.points[i][0] * boxWidth) + halfBoxWidth, y + (control.points[i][1] * boxWidth) + halfBoxWidth)
+        newPointsList[control.id].append(newTuple) 
+    if (len(newPointsList[control.id]) > 1):
+      pygame.draw.lines(screen, colorList[control.id], False, newPointsList[control.id], quarterBox)
 
 def visualize(grid, gridSize, numberOfColors):
   for event in pygame.event.get():

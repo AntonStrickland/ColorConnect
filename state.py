@@ -4,10 +4,10 @@
 import copy
 
 class State():
-  __slots__ = ['board', 'controllers']
+  __slots__ = ['controllers']
   
-  def __init__(self, board, controllers):
-    self.board = board
+  def __init__(self, controllers):
+    # self.board = board
     self.controllers = controllers
     # self.pointsList = []
     
