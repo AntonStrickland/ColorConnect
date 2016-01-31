@@ -19,6 +19,15 @@ if len(argv) < 2:
   exit()
 else:
   cfgPath = argv[1]
+
+nameIndex = len(cfgPath)-5
+name = ""
+while(cfgPath[nameIndex] != '/'):
+  name += cfgPath[nameIndex]
+  nameIndex -= 1
+
+name = name[::-1] 
+print (name)
   
 # print("Creating grid...")
 gridInput = []
@@ -99,7 +108,7 @@ while (not terminationCondition):
   
 print ("No moves remaining. Game over!")
 
-with open("output/solution.txt",'w+') as output:
+with open("output/solution-" + name + ".txt",'w+') as output:
   output.write(str(elapsedTime*1000000) + "\n")
   pathIndex = len(solutionPath)-2
   controllerNumber = solutionPath[pathIndex].action[1]
