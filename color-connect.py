@@ -9,6 +9,7 @@ import iddfts
 import state
 from sys import argv
 import time
+import visual
 
 # Set config filepath
 cfgPath = ''

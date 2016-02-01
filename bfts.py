@@ -7,13 +7,14 @@ import node
       
 class BFTS():
 
-  __slots__ = ['gameboard', 'totalNodes', 'frontier', 'actionSet']
+  __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet']
 
   def __init__(self, gameboard, actionSet):
     self.gameboard = gameboard
     self.totalNodes = 1
     self.frontier = queue.Queue()
     self.actionSet = actionSet
+    self.gridSize = len(gameboard)
   
   # Perform the BFTS algorithm
   def Search(self, rootNode):
@@ -42,13 +43,12 @@ class BFTS():
         
   # Expand the frontier of nodes for searching
   def ExpandFrontier(self, currentNode):
-    gridSize = len(self.gameboard)
     # For each possible action that can be taken by each possible color controller
     for controller in currentNode.state.controllers:
       for action in self.actionSet:
         if controller.reachedGoal is False:
           # If this color has not already reached its endpoint and it's a valid action, then add the resulting state to the frontier
-          if (controller.checkMoveValidity(action, gridSize, gridSize, self.gameboard)):
+          if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1)
