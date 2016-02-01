@@ -2,8 +2,7 @@
 #CS5400 Puzzle Project 1
 
 import state
-import map
-  
+
     
 class ColorController():
 
@@ -15,8 +14,8 @@ class ColorController():
       self.pos_y = startY
       self.reachedGoal = goal
       self.points = pts
-
-        
+    
+    # Take an action on the actual gameboard
     def takeAction(self, move, world):
       if (move == "Left"):
         self.pos_x -= 1
@@ -27,10 +26,10 @@ class ColorController():
       elif (move == "Down"):
         self.pos_y += 1
       
-      # print (str(self.pos_x) + "," + str(self.pos_y))
       world[self.pos_x][self.pos_y].colored = str(self.id)
       return self.pos_x, self.pos_y
       
+    # Check to see if the controller's new position is at an endpoint or empty space
     def checkColorConnect(self, newPos):
       if (newPos.colored == "e"):
         return True
@@ -38,26 +37,24 @@ class ColorController():
         return True
       else:
         return False
-        
-    def checkMoveValidity(self, move, maxWidth, maxHeight, gameboard):
-     # Move left		
+    
+    # Check to see if a valid move can be made
+    def checkMoveValidity(self, move, maxWidth, maxHeight, gameboard):	
      if (move == "Left" and self.pos_x - 1 >= 0 and self.checkColorConnect(gameboard[self.pos_x-1][self.pos_y])):
        return True
        
-     # Move right
      if (move == "Right" and self.pos_x + 1 < maxWidth and self.checkColorConnect(gameboard[self.pos_x+1][self.pos_y])):
        return True
-       
-     # Move up		
+       		
      if (move == "Up" and self.pos_y - 1 >= 0 and self.checkColorConnect(gameboard[self.pos_x][self.pos_y-1])):
        return True
        
-     # Move down		
      if (move == "Down" and self.pos_y + 1 < maxHeight and self.checkColorConnect(gameboard[self.pos_x][self.pos_y+1])):
        return True
        
      return False
-      
+    
+    # Return a new state, given a current state and an action
     def result(self, gameboard, currentState, move):
       newX = self.pos_x
       newY = self.pos_y
@@ -72,7 +69,6 @@ class ColorController():
         newY = self.pos_y + 1
         
       # Only make valid moves
-      # print (self.gameboard[newX][newY].colored)
       for controls in currentState.controllers:
         for p in controls.points:
           if (newX, newY) == p:
@@ -82,9 +78,9 @@ class ColorController():
 
       # Copy and update the same controller within the new state
       newControllerList = []
-      for control in currentState.controllers:
-        newPoints = control.points[:]
-        newController = ColorController(control.id, control.pos_x, control.pos_y, newPoints, control.reachedGoal)
+      for controls in currentState.controllers:
+        newPoints = controls.points[:]
+        newController = ColorController(controls.id, controls.pos_x, controls.pos_y, newPoints, controls.reachedGoal)
         if (newController.id == self.id):
           newController.pos_x = newX
           newController.pos_y = newY
@@ -93,8 +89,5 @@ class ColorController():
             newController.reachedGoal = True
         newControllerList.append(newController)
 
-
-      newState = state.State(newControllerList)    
-      # newState.board[newX][newY].colored = str(self.id)
-
+      newState = state.State(newControllerList)
       return newState

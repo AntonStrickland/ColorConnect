@@ -1,5 +1,6 @@
 # ColorConnect
 CS5400 AI Puzzle Project
+Anton Strickland
 
 To run ColorConnect, type: 
 python color-connect.py FILEPATH.TXT

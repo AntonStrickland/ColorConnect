@@ -15,7 +15,8 @@ class Tile():
     return str(self.colored)
 
 
-def CreateMap(width, height, input, offset=1):
+# Create the initial board setup
+def CreateInitialBoard(width, height, input, offset=1):
   world = []
   seenColors = []
   for i in range(height):
@@ -34,18 +35,5 @@ def CreateMap(width, height, input, offset=1):
         if world[i][j].endPoint is not True:
           world[i][j].startPoint = True
           seenColors.append(world[i][j].colored)
-    
-  return world
-  
-def CopyMap(width, height, input):
-  world = []
-  for i in range(height):
-    world.append([])
-    for j in range(width):
-      newTile = Tile(i, j, input[i][j].colored)
-      newTile.endPoint = input[i][j].endPoint
-      newTile.startPoint = input[i][j].startPoint
-      world[i].append(newTile)
-      # print (str(i) + "," + str(j) + ": " + str(input[i][j]))
     
   return world

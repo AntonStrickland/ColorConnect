@@ -2,9 +2,7 @@
 #CS5400 Puzzle Project 1
 import queue
 import state
-import visual
-import agent
-import gc
+import control
 
 totalNodes = 1
 
@@ -29,37 +27,31 @@ class BFTS():
     self.totalNodes = 1
     self.frontier = queue.Queue()
     self.actionSet = actionSet
-      
+  
+  # Perform the BFTS algorithm
   def Search(self, rootNode):
 
     print("Finding solution...")
-    
-    gc.enable()
     solutionFound = False
-    searching = True
     currentNode = rootNode
 
+    # Begin with the root node in the frontier
     self.frontier.put(rootNode)
     self.totalNodes = 1
 
     while (not self.frontier.empty()):
       # Check to see if this state is the solution
       currentNode = self.frontier.get()
-      # print("Checking state...") #+ str(currentNode.state.board))
-      # currentNode.state.printBoard()
       solutionFound = self.CheckSolution(currentNode)
       
       # If a solution has not been found, then expand the frontier
+      # Otherwise, return the winning node
       if (not solutionFound):
-        # print("Total nodes:" + str(self.totalNodes))
         self.ExpandFrontier(currentNode)
-        # visual.drawFrontier(currentNode, self.gameboard, self.totalNodes)
       else:
-        print("Total nodes:" + str(self.totalNodes))
-        # print (currentNode)
         return currentNode
-      gc.collect(0)
     print("No solution found.")
+    return None
       
   # Check if all controllers have reached their endpoints
   def CheckSolution(self, node):
@@ -69,25 +61,22 @@ class BFTS():
     print("Solution found!")
     return True
     
+  # Returns the solution path from the winning node to the root node
   def getSolutionPath(self, node):
-    #print(node)
     solutionPath = self.addToPath(node, [])
     return solutionPath
     
-    
+  # Add to the solution path (in reverse order)
   def addToPath(self, node, path):
-    #node.state.printBoard()
-    #print("---")
     path.append(node)
     if (node.parent is not None):
       self.addToPath(node.parent, path)
     return path
         
-
-        
+  # Expand the frontier of nodes for searching
   def ExpandFrontier(self, node):
-    # For each possible action that can be taken by each possible color controller
     gridSize = len(self.gameboard)
+    # For each possible action that can be taken by each possible color controller
     for controller in node.state.controllers:
       for action in self.actionSet:
         if controller.reachedGoal is False:
@@ -98,6 +87,5 @@ class BFTS():
               newNode = Node(newState, node, (action, controller.id), node.pathCost + 1)
               self.frontier.put(newNode)
               self.totalNodes = self.totalNodes + 1
-              # visual.frontierList.append(newNode)
             
     return totalNodes
