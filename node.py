@@ -2,16 +2,29 @@
 #CS5400 Puzzle Project 2
 
 class Node():
-    __slots__ = ['state', 'parent', 'action', 'pathCost']
+    __slots__ = ['state', 'parent', 'action', 'pathCost', 'heuristic']
     
-    def __init__(self, state, parent, action, cost):
+    def __init__(self, state, parent, action, cost, heuristic=0):
       self.state = state
       self.parent = parent
       self.action = action
       self.pathCost = cost
+      self.heuristic = heuristic
 
     def __str__(self):
       return "this is a node"
+      
+    def __eq__(self, other):
+      return self.heuristic == other.heuristic
+      
+    def __ne__(self, other):
+      return self.heuristic != other.heuristic
+
+    def __gt__(self, other):
+      return self.heuristic > other.heuristic
+
+    def __lt__(self, other):
+      return self.heuristic < other.heuristic      
       
 # Check if all controllers have reached their endpoints
 def CheckSolution(currentNode):

@@ -13,7 +13,7 @@ class GBFGS():
   def __init__(self, gameboard, actionSet, endPointList):
     self.gameboard = gameboard
     self.totalNodes = 1
-    self.frontier = queue.Queue()
+    self.frontier = queue.PriorityQueue()
     self.actionSet = actionSet
     self.gridSize = len(gameboard)
     self.endPointList = endPointList
@@ -44,6 +44,7 @@ class GBFGS():
         
       self.exploredSet.append(currentNode)
       self.ExpandFrontier(currentNode)
+      visual.drawFrontier(currentNode, self.gameboard)
         
     print("No solution found.")
     return None
@@ -58,10 +59,11 @@ class GBFGS():
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
-              #newHeuristic = self.ManhattanDist(controller.pos_x, controller.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
-              newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1)
+              newHeuristic = self.ManhattanDist(controller.pos_x, controller.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
+              newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               if ((newNode not in self.exploredSet)):
                 self.frontier.put(newNode)
+                visual.frontierList.append(newNode)
                 self.totalNodes = self.totalNodes + 1
                 # print(self.totalNodes)
             

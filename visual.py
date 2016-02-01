@@ -60,7 +60,7 @@ def drawFrontier(currentNode, gameboard):
   statesPerColumn = 3
   index = 0
   
-  delayTime = 0
+  delayTime = 500
 
   drawBoard(gameboard, bigWidth, int(bigWidth/2), bigX, bigY, currentNode.state.controllers)
   pygame.display.update()
