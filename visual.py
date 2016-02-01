@@ -44,32 +44,37 @@ def initialize(grid, gridSize, numberOfColors):
         colorPointList[int(grid[i][j].colored)].append((grid[i][j].y, grid[i][j].x))
         
         
-def drawFrontier(currentNode, gameboard, totalNodes):
+def drawFrontier(currentNode, gameboard):
 
   screen.fill(colorBlack)
-  x = 100
-  y = 100
+  
+  numberOfTiles = len(gameboard)
+  
+  bigX = 25
+  bigY = 100
+  bigWidth = 50
+  
+  smallX = 25 + bigX + (bigWidth*numberOfTiles)
+  smallY = bigY
+  
+  statesPerColumn = 3
   index = 0
   
   delayTime = 0
-  if (totalNodes > 10000):
-    delayTime = 0
-  if (totalNodes > 100000):
-    delayTime = 5
 
-  drawBoard(gameboard, 50, 25, 200, 100, currentNode.state.controllers)
+  drawBoard(gameboard, bigWidth, int(bigWidth/2), bigX, bigY, currentNode.state.controllers)
   pygame.display.update()
   pygame.time.delay(delayTime)
     
   for node in frontierList:
     # update the screen
-    if (index > 5):
+    if (index > statesPerColumn):
       index = 0
-      x = x + 100
-      y = 100
+      smallX = smallX + 75
+      smallY = 100
     # print (node.state.pointsList)
-    drawBoard(gameboard, 10, 5, x, y, node.state.controllers, False)
-    y = y + 50
+    drawBoard(gameboard, 10, 5, smallX, smallY, node.state.controllers, False)
+    smallY = smallY + 50
     index = index + 1
     
     pygame.display.update()

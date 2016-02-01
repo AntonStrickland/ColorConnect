@@ -3,6 +3,7 @@
 
 import node
 import sys
+import visual
 
 class IDDFTS():
 
@@ -28,12 +29,14 @@ class IDDFTS():
         return (None, "Cutoff")
       else:
         hasBeenCutoff = False
+        visual.drawFrontier(currentNode, self.gameboard)
         for controller in currentNode.state.controllers:
           for action in self.actionSet:
             if (controller.reachedGoal is False and controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
               newState = controller.result(self.gameboard, currentNode.state, action)
               if (newState is not None):
                 childNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1)
+                visual.frontierList.append(childNode)
                 self.totalNodes = self.totalNodes + 1
                 result = self.DepthLimitedSearch(childNode, depthLimit-1)
                 if (result[1] == "Cutoff"):

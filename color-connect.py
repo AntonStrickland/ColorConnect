@@ -63,6 +63,7 @@ terminationCondition = False
 
 # Initial state
 initialState = state.State(controllerList)
+visual.initialize(gameboard, gridSize, numberOfColors)
 
 rootNode = node.Node(initialState, None, None, 0)
 startTime = time.time()
