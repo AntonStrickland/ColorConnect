@@ -89,21 +89,17 @@ def drawFrontier(currentNode, gameboard):
     
 
 def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, controllers=None, printf=True):
-  colorBGIndex = 0
   quarterBox = int(halfBoxWidth*0.5)
   circleRadius = int(halfBoxWidth*0.75)
   gridSize = len(board)
   for i in range(gridSize):
-    colorBGIndex = colorBGIndex + 1
     for j in range(gridSize):
       currentColor = board[i][j].colored
       
-      if (colorBGIndex%2 == 0):
+      if ((i+j)%2 == 0):
         pygame.draw.rect(screen, bgColor1, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
       else:
         pygame.draw.rect(screen, bgColor2, (x+(boxWidth*i),y+(boxWidth*j),boxWidth,boxWidth), thickness)
-        
-      colorBGIndex = colorBGIndex + 1
         
       if currentColor == "e":
         currentColor = colorBlack
@@ -118,6 +114,8 @@ def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, controllers=None, pri
   newPointsList = []
   for control in controllers:
     newPointsList.append([])
+  
+  for control in controllers:
     #if (printf is True):
       #print(control.points)
     for i in range(len(control.points)):

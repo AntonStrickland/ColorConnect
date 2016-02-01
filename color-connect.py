@@ -6,6 +6,7 @@ import tile
 import node
 import bfts
 import iddfts
+import gbfgs
 import state
 from sys import argv
 import time
@@ -75,6 +76,9 @@ if (searchAlgorithm == "bfts"):
 elif (searchAlgorithm == "id-dfts"):
   IDDFTS = iddfts.IDDFTS(gameboard, actionSet)
   solutionNode = IDDFTS.Search(rootNode)
+elif (searchAlgorithm == "gbfgs"):
+  GBFGS = gbfgs.GBFGS(gameboard, actionSet, endPointList)
+  solutionNode = GBFGS.Search(rootNode)
 else:
   print("Please enter either bfts or id-dfts as a search algorithm.")
   exit()
@@ -94,6 +98,7 @@ if (solutionNode is not None):
       
     if (solutionPath[pathIndex].action is not None):
       controllerNumber = solutionPath[pathIndex].action[1]
+      print (controllerNumber, solutionPath[pathIndex].action[0])
       newX, newY = controllerList[controllerNumber].takeAction(solutionPath[pathIndex].action[0], gameboard)
       
     pathIndex = pathIndex - 1
