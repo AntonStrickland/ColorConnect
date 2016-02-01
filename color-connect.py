@@ -3,7 +3,9 @@
 
 import control
 import tile
+import node
 import bfts
+import iddfts
 import state
 from sys import argv
 import time
@@ -13,8 +15,12 @@ cfgPath = ''
 if len(argv) < 2:
   print("Please specify a file path for the puzzle instance text file.")
   exit()
+
+cfgPath = argv[1]  
+if len(argv) == 3:
+  searchAlgorithm = argv[2]
 else:
-  cfgPath = argv[1]
+  searchAlgorithm = "bfts"
 
 # Create the name of the output file
 nameIndex = len(cfgPath)-5
@@ -57,16 +63,24 @@ terminationCondition = False
 # Initial state
 initialState = state.State(controllerList)
 
-rootNode = bfts.Node(initialState, None, None, 0)
+rootNode = node.Node(initialState, None, None, 0)
 startTime = time.time()
 
 # This is where we do the thinking for the game strategy
-BFTS = bfts.BFTS(gameboard, actionSet)
-solutionNode = BFTS.Search(rootNode)
+if (searchAlgorithm == "bfts"):
+  BFTS = bfts.BFTS(gameboard, actionSet)
+  solutionNode = BFTS.Search(rootNode)
+elif (searchAlgorithm == "id-dfts"):
+  IDDFTS = iddfts.IDDFTS(gameboard, actionSet)
+  solutionNode = IDDFTS.Search(rootNode)
+else:
+  print("Please enter either bfts or id-dfts as a search algorithm.")
+  exit()
+
 elapsedTime = time.time() - startTime
 
 if (solutionNode is not None):
-  solutionPath = BFTS.getSolutionPath(solutionNode)
+  solutionPath = node.getSolutionPath(solutionNode)
 
   pathIndex = len(solutionPath)-1
 
@@ -105,4 +119,6 @@ if (solutionNode is not None):
     output.write("\n" + s)
       
   print ("Please check output/solution-" + name + ".txt for solution.")
+else:
+  print ("Search failed to find a solution.")
   
