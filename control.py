@@ -26,14 +26,6 @@ class ColorController():
       elif (move == "Down"):
         self.pos_y += 1
       
-      s = ""
-      for i in range(len(world)):    
-        for j in range(len(world[0])):
-          s += str(world[j][i].colored) + " "
-        s += "\n"
-      print(s)
-      print (move)
-      print (self.pos_x, self.pos_y)
       world[self.pos_x][self.pos_y].colored = str(self.id)
       return self.pos_x, self.pos_y
       

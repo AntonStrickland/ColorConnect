@@ -31,7 +31,7 @@ class IDDFTS():
       else:
         hasBeenCutoff = False
         #if (self.totalNodes > 18450000):
-        visual.drawFrontier(currentNode, self.gameboard)
+        # visual.drawFrontier(currentNode, self.gameboard)
         for controller in currentNode.state.controllers:
           for action in self.actionSet:
             if (controller.reachedGoal is False and controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
@@ -41,7 +41,7 @@ class IDDFTS():
                 # visual.frontierList.append(childNode)
                 self.totalNodes = self.totalNodes + 1
                 #if (self.totalNodes > 18450000):
-                visual.frontierList.append(childNode)
+                # visual.frontierList.append(childNode)
                 result = self.DepthLimitedSearch(childNode, depthLimit-1)
                 if (result[1] == "Cutoff"):
                   hasBeenCutoff = True

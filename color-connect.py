@@ -73,17 +73,18 @@ startTime = time.time()
 if (searchAlgorithm == "bfts"):
   BFTS = bfts.BFTS(gameboard, actionSet)
   solutionNode = BFTS.Search(rootNode)
-elif (searchAlgorithm == "id-dfts"):
+elif (searchAlgorithm == "iddfts"):
   IDDFTS = iddfts.IDDFTS(gameboard, actionSet)
   solutionNode = IDDFTS.Search(rootNode)
 elif (searchAlgorithm == "gbfgs"):
   GBFGS = gbfgs.GBFGS(gameboard, actionSet, endPointList)
   solutionNode = GBFGS.Search(rootNode)
 else:
-  print("Please enter either bfts or id-dfts as a search algorithm.")
+  print("Please enter either bfts or iddfts as a search algorithm.")
   exit()
 
 elapsedTime = time.time() - startTime
+print(elapsedTime)
 
 if (solutionNode is not None):
   solutionPath = node.getSolutionPath(solutionNode)
@@ -98,24 +99,34 @@ if (solutionNode is not None):
       
     if (solutionPath[pathIndex].action is not None):
       controllerNumber = solutionPath[pathIndex].action[1]
-      print (controllerNumber, solutionPath[pathIndex].action[0])
-      newX, newY = controllerList[controllerNumber].takeAction(solutionPath[pathIndex].action[0], gameboard)
+      
+      for controller in controllerList:
+        if controller.id == controllerNumber:
+          newX, newY = controller.takeAction(solutionPath[pathIndex].action[0], gameboard)
       
     pathIndex = pathIndex - 1
       
   # Write to the output file
-  with open("output/solution-" + name + ".txt",'w+') as output:
+  with open("output/solution-" + searchAlgorithm + "-" + name + ".txt",'w+') as output:
     microseconds = int(elapsedTime*1000000)
     output.write(str(microseconds) + "\n")
     pathIndex = len(solutionPath)-2
     output.write( str(len(solutionPath)-1) + "\n")
     controllerNumber = solutionPath[pathIndex].action[1]
-    outputString = str(controllerNumber) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_x) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_y)
+    
+    for controller in solutionPath[pathIndex].state.controllers:
+        if controller.id == controllerNumber:
+          outputString = str(controllerNumber) + " " + str(controller.pos_x) + " " + str(controller.pos_y)
+          
     output.write(outputString)
     pathIndex = pathIndex - 1
     while pathIndex > -1:
       controllerNumber = solutionPath[pathIndex].action[1]
-      outputString =  ", " + str(controllerNumber) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_x) + " " + str(solutionPath[pathIndex].state.controllers[controllerNumber].pos_y)
+      
+      for controller in solutionPath[pathIndex].state.controllers:
+        if controller.id == controllerNumber:
+          outputString =  ", " + str(controllerNumber) + " " + str(controller.pos_x) + " " + str(controller.pos_y)
+          
       output.write(outputString)
       pathIndex = pathIndex - 1
     s = ""
@@ -125,7 +136,7 @@ if (solutionNode is not None):
       s += "\n"
     output.write("\n" + s)
       
-  print ("Please check output/solution-" + name + ".txt for solution.")
+  print ("Please check output/solution-" + searchAlgorithm + "-" + name + ".txt for solution.")
 else:
   print ("Search failed to find a solution.")
   
