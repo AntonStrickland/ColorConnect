@@ -1,5 +1,5 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 1
+#CS5400 Puzzle Project 3
 
 import control
 import tile
@@ -7,6 +7,7 @@ import node
 import bfts
 import iddfts
 import gbfgs
+import gbfts
 import state
 from sys import argv
 import time
@@ -53,6 +54,10 @@ for i in range(gridSize):
         startPointList.append((gameboard[i][j].colored, i, j))
       elif gameboard[i][j].endPoint is True:
         endPointList.append((gameboard[i][j].colored, i, j))
+        
+        
+startPointList.sort(key=lambda node: node[0])
+endPointList.sort(key=lambda node: node[0])
 
 # Create the controllers for each color
 controllerList = []
@@ -62,9 +67,12 @@ for c in range(numberOfColors):
 actionSet = ["Left", "Right", "Up", "Down"]
 terminationCondition = False
 
+print(startPointList)
+print(endPointList)
+
 # Initial state
 initialState = state.State(controllerList)
-visual.initialize(gameboard, gridSize, numberOfColors)
+# visual.initialize(gameboard, gridSize, numberOfColors)
 
 rootNode = node.Node(initialState, None, None, 0)
 startTime = time.time()
@@ -79,8 +87,11 @@ elif (searchAlgorithm == "iddfts"):
 elif (searchAlgorithm == "gbfgs"):
   GBFGS = gbfgs.GBFGS(gameboard, actionSet, endPointList)
   solutionNode = GBFGS.Search(rootNode)
+elif (searchAlgorithm == "gbfts"):
+  GBFTS = gbfts.GBFTS(gameboard, actionSet, endPointList)
+  solutionNode = GBFTS.Search(rootNode)
 else:
-  print("Please enter either bfts or iddfts as a search algorithm.")
+  print("Please enter either bfts, iddfts, gbfgs, or gbfts as a search algorithm.")
   exit()
 
 elapsedTime = time.time() - startTime

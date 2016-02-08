@@ -19,8 +19,10 @@ class IDDFTS():
     print("Performing ID-DFTS...")
     for depth in range(sys.maxsize):
       print(depth)
+      self.totalNodes = 1
       result = self.DepthLimitedSearch(rootNode, depth)
       if result[1] != "Cutoff":
+        print(self.totalNodes)
         return result[0]
         
   def DepthLimitedSearch(self, currentNode, depthLimit):
@@ -31,17 +33,16 @@ class IDDFTS():
       else:
         hasBeenCutoff = False
         #if (self.totalNodes > 18450000):
-        # visual.drawFrontier(currentNode, self.gameboard)
+        visual.drawFrontier(currentNode, self.gameboard)
         for controller in currentNode.state.controllers:
           for action in self.actionSet:
             if (controller.reachedGoal is False and controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
               newState = controller.result(self.gameboard, currentNode.state, action)
               if (newState is not None):
                 childNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1)
-                # visual.frontierList.append(childNode)
                 self.totalNodes = self.totalNodes + 1
                 #if (self.totalNodes > 18450000):
-                # visual.frontierList.append(childNode)
+                visual.frontierList.append(childNode)
                 result = self.DepthLimitedSearch(childNode, depthLimit-1)
                 if (result[1] == "Cutoff"):
                   hasBeenCutoff = True

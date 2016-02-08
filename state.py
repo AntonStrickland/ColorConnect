@@ -2,10 +2,19 @@
 #CS5400 Puzzle Project 1
 
 class State():
-  __slots__ = ['controllers']
+  __slots__ = ['controllers', 'stateID']
   
   def __init__(self, controllers):
     self.controllers = controllers
+    self.stateID = ""
+    
+  def getID(self):
+    self.stateID = ""
+    for con in self.controllers:
+      for p in con.points:
+        self.stateID += str(p)
+    # print(self.stateID)
+    return
   
   # Print the board to the screen
   def printBoard(self):

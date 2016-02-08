@@ -6,18 +6,17 @@ import sys
 import visual
 import queue
 
-class GBFGS():
+class GBFTS():
 
   __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet', 'endPointList', 'exploredSet']
 
   def __init__(self, gameboard, actionSet, endPointList):
     self.gameboard = gameboard
     self.totalNodes = 1
-    self.frontier = queue.PriorityQueue(sys.maxsize)
+    self.frontier = queue.PriorityQueue()
     self.actionSet = actionSet
     self.gridSize = len(gameboard)
     self.endPointList = endPointList
-    self.exploredSet = []
     
   def ManhattanDist(self, x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
@@ -25,32 +24,27 @@ class GBFGS():
   # Perform the BFTS algorithm
   def Search(self, rootNode):
 
-    print("Performing GBFGS...")
+    print("Performing GBFTS...")
     solutionFound = False
-    del self.exploredSet[:]
 
     # Begin with the root node in the frontier
-    self.frontier.put( (rootNode.heuristic, rootNode) )
+    self.frontier.put(rootNode)
     self.totalNodes = 1
 
     while (not self.frontier.empty()):
       # Check to see if this state is the solution
-      frontierGET = self.frontier.get()
-      currentNode = frontierGET[1]
+      currentNode = self.frontier.get()
       solutionFound = node.CheckSolution(currentNode)
       
       # If a solution has been found, return it. Else, expand frontier.
       if (solutionFound):
         return currentNode
-        
 
-      
-      self.exploredSet.append( currentNode.state.stateID )
-      # visual.exploredList.append(currentNode)
       if (currentNode in visual.frontierList):
         visual.frontierList.remove(currentNode)
+
       self.ExpandFrontier(currentNode)
-      # visual.drawFrontier(currentNode, self.gameboard, True)
+      # visual.drawFrontier(currentNode, self.gameboard)
         
     print("No solution found.")
     return None
@@ -65,38 +59,9 @@ class GBFGS():
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
-              endPoint = None
-              for e in self.endPointList:
-                if e[0] == str(controller.id):
-                  endPoint = e
-              ctrl = None
-              for c in newState.controllers:
-                if c.id == controller.id:
-                  ctrl = c
-                  
-              
-            
-              # print(endPoint)
-              # print("---")
-              # print((controller.pos_x, controller.pos_y, endPoint[1], endPoint[2]))
-              newHeuristic = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, endPoint[1], endPoint[2])
-              
-              # if (controller.id == 2):
-                # print(newState.controllers[controller.id].pos_x, newState.controllers[controller.id].pos_y, endPoint[1], endPoint[2])
-                # print(newHeuristic)
-                
+              newHeuristic = self.ManhattanDist(controller.pos_x, controller.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
-              
-              newNode.state.getID()
-              if (newNode.state.stateID not in self.exploredSet):
-                self.frontier.put( (newHeuristic,newNode) )
-                # visual.frontierList.append(newNode)
-                self.totalNodes = self.totalNodes + 1
-                
-                # print(self.totalNodes)
-                
-              if (self.totalNodes % 50000 == 0):
-                print("qSize: " + str(self.frontier.qsize()))
-                print("ES: " + str(len(self.exploredSet)))
-                print("Total: " + str(self.totalNodes))
+              self.frontier.put(newNode)
+              # visual.frontierList.append(newNode)
+              self.totalNodes = self.totalNodes + 1
             

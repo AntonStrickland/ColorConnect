@@ -10,9 +10,6 @@ class Node():
       self.action = action
       self.pathCost = cost
       self.heuristic = heuristic
-
-    def __str__(self):
-      return "this is a node"
       
     def __eq__(self, other):
       return self.heuristic == other.heuristic

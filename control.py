@@ -14,6 +14,9 @@ class ColorController():
       self.pos_y = startY
       self.reachedGoal = goal
       self.points = pts
+      
+    def __str__(self):
+      return str(self.points)
     
     # Take an action on the actual gameboard
     def takeAction(self, move, world):

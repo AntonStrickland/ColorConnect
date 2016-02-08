@@ -13,17 +13,26 @@ colorOrange = (255,165,0)
 colorWhite = (255,255,255)
 colorBlack = (0,0,0)
 colorPink = (255,200,200)
+colorQ = (111,111,111)
+colorW = (55,0,55)
+colorE = (22,22,200)
 
-colorList = [colorRed, colorBlue, colorGreen, colorOrange, colorPink, colorWhite]
+colorList = [colorRed, colorBlue, colorGreen, colorOrange, colorPink, colorWhite, colorQ, colorW, colorE]
 bgColor1 = (54,54,54)
 bgColor2 = (45,45,45)
 
 colorPointList = []
 frontierList = []
+exploredList = []
 
 thickness = 0
-screen = pygame.display.set_mode((640,480))
-
+#screen = pygame.display.set_mode((1024,480))
+pygame.init()
+  
+# initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
+myfont = pygame.font.SysFont("monospace", 15)
+headerFont = pygame.font.SysFont("monospace", 30)
+  
 def initialize(grid, gridSize, numberOfColors):
 
   x = 100
@@ -31,7 +40,8 @@ def initialize(grid, gridSize, numberOfColors):
   boxWidth = 10
   halfBoxWidth = 5
   
-  pygame.init()
+
+
   pygame.display.update()
 
   # Create a list of points for each color
@@ -44,7 +54,7 @@ def initialize(grid, gridSize, numberOfColors):
         colorPointList[int(grid[i][j].colored)].append((grid[i][j].y, grid[i][j].x))
         
         
-def drawFrontier(currentNode, gameboard):
+def drawFrontier(currentNode, gameboard, graphSearch=False):
 
   screen.fill(colorBlack)
   
@@ -57,16 +67,26 @@ def drawFrontier(currentNode, gameboard):
   smallX = 25 + bigX + (bigWidth*numberOfTiles)
   smallY = bigY
   
-  statesPerColumn = 3
+  statesPerColumn = 4
+  statesPerFrontier = 29
   index = 0
   
   delayTime = 0
 
   drawBoard(gameboard, bigWidth, int(bigWidth/2), bigX, bigY, currentNode.state.controllers)
+  
+  # render text
+  label = headerFont.render("Current H:" + str(currentNode.heuristic), 1, (255,255,0))
+  screen.blit(label, (bigX, bigY-30))
+
   pygame.display.update()
   pygame.time.delay(delayTime)
-    
+  
+  frontierList.sort(key=lambda node: node.heuristic)
+  nodeIndex = 0
   for node in frontierList:
+    if nodeIndex > statesPerFrontier:
+      break
     # update the screen
     if (index > statesPerColumn):
       index = 0
@@ -74,18 +94,46 @@ def drawFrontier(currentNode, gameboard):
       smallY = 100
     # print (node.state.pointsList)
     drawBoard(gameboard, 10, 5, smallX, smallY, node.state.controllers, False)
-    smallY = smallY + 50
+    label = myfont.render("H:" + str(node.heuristic), 1, (255,255,0))
+    screen.blit(label, (smallX+40, smallY))
+    smallY = smallY + 75
     index = index + 1
-    
+    nodeIndex = nodeIndex + 1
     pygame.display.update()
     pygame.time.delay(delayTime)
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         pygame.quit()
         sys.exit()
-        
-  del frontierList[:]
-  pygame.time.delay(delayTime)
+  
+  '''
+  if (graphSearch):
+    index = 0
+    smallX = 25
+    smallY = 125 + bigX + (bigWidth*numberOfTiles)
+    for node in exploredList:
+      # update the screen
+      if (index > statesPerColumn):
+        index = 0
+        smallX = smallX + 75
+        smallY = 125 + bigX + (bigWidth*numberOfTiles)
+      # print (node.state.pointsList)
+      drawBoard(gameboard, 10, 5, smallX, smallY, node.state.controllers, False)
+      smallY = smallY + 50
+      index = index + 1
+      
+      pygame.display.update()
+      pygame.time.delay(delayTime)
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          pygame.quit()
+          sys.exit()
+  '''
+  
+  if (not graphSearch):  
+    del frontierList[:]
+  pygame.time.delay(delayTime*10)
+  
     
 
 def drawBoard(board, boxWidth, halfBoxWidth, x=100, y=100, controllers=None, printf=True):
