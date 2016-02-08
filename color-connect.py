@@ -8,6 +8,7 @@ import bfts
 import iddfts
 import gbfgs
 import gbfts
+import astar
 import state
 from sys import argv
 import time
@@ -77,6 +78,7 @@ initialState = state.State(controllerList)
 rootNode = node.Node(initialState, None, None, 0)
 startTime = time.time()
 
+print("Performing " + searchAlgorithm + "...")
 # This is where we do the thinking for the game strategy
 if (searchAlgorithm == "bfts"):
   BFTS = bfts.BFTS(gameboard, actionSet)
@@ -90,6 +92,9 @@ elif (searchAlgorithm == "gbfgs"):
 elif (searchAlgorithm == "gbfts"):
   GBFTS = gbfts.GBFTS(gameboard, actionSet, endPointList)
   solutionNode = GBFTS.Search(rootNode)
+elif (searchAlgorithm == "astar"):
+  ASTAR = astar.ASTAR(gameboard, actionSet, startPointList, endPointList)
+  solutionNode = ASTAR.Search(rootNode)
 else:
   print("Please enter either bfts, iddfts, gbfgs, or gbfts as a search algorithm.")
   exit()
