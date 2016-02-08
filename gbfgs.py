@@ -8,7 +8,7 @@ import queue
 
 class GBFGS():
 
-  __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet', 'endPointList', 'exploredSet']
+  __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet', 'endPointList', 'exploredSet', 'frontierSet']
 
   def __init__(self, gameboard, actionSet, endPointList):
     self.gameboard = gameboard
@@ -18,14 +18,12 @@ class GBFGS():
     self.gridSize = len(gameboard)
     self.endPointList = endPointList
     self.exploredSet = []
+    self.frontierSet = []
     
   def ManhattanDist(self, x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
     
-  # Perform the BFTS algorithm
   def Search(self, rootNode):
-
-    print("Performing GBFGS...")
     solutionFound = False
     del self.exploredSet[:]
 
@@ -41,11 +39,11 @@ class GBFGS():
       
       # If a solution has been found, return it. Else, expand frontier.
       if (solutionFound):
+        print(self.totalNodes)
         return currentNode
-        
-
       
-      self.exploredSet.append( currentNode.state.stateID )
+      
+      self.exploredSet.append(currentNode.state.stateID)
       # visual.exploredList.append(currentNode)
       if (currentNode in visual.frontierList):
         visual.frontierList.remove(currentNode)
@@ -65,10 +63,6 @@ class GBFGS():
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
-              endPoint = None
-              for e in self.endPointList:
-                if e[0] == str(controller.id):
-                  endPoint = e
               ctrl = None
               for c in newState.controllers:
                 if c.id == controller.id:
@@ -79,7 +73,7 @@ class GBFGS():
               # print(endPoint)
               # print("---")
               # print((controller.pos_x, controller.pos_y, endPoint[1], endPoint[2]))
-              newHeuristic = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, endPoint[1], endPoint[2])
+              newHeuristic = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
               
               # if (controller.id == 2):
                 # print(newState.controllers[controller.id].pos_x, newState.controllers[controller.id].pos_y, endPoint[1], endPoint[2])
@@ -88,14 +82,16 @@ class GBFGS():
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               
               newNode.state.getID()
-              if (newNode.state.stateID not in self.exploredSet):
+              newHash = newNode.state.stateID
+              if (newHash not in self.exploredSet and newHash not in self.frontierSet):
                 self.frontier.put( (newHeuristic,newNode) )
+                self.frontierSet.append( newHash )
                 # visual.frontierList.append(newNode)
                 self.totalNodes = self.totalNodes + 1
                 
                 # print(self.totalNodes)
                 
-              if (self.totalNodes % 50000 == 0):
+              if (self.totalNodes % 10000 == 0):
                 print("qSize: " + str(self.frontier.qsize()))
                 print("ES: " + str(len(self.exploredSet)))
                 print("Total: " + str(self.totalNodes))

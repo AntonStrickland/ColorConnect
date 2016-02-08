@@ -8,7 +8,7 @@ import queue
 
 class ASTAR():
 
-  __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet', 'startPointList', 'endPointList', 'exploredSet']
+  __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet', 'startPointList', 'endPointList', 'exploredSet', 'frontierSet']
 
   def __init__(self, gameboard, actionSet, startPointList, endPointList):
     self.gameboard = gameboard
@@ -19,6 +19,7 @@ class ASTAR():
     self.startPointList = startPointList
     self.endPointList = endPointList
     self.exploredSet = []
+    self.frontierSet = []
     
   def ManhattanDist(self, x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
@@ -42,6 +43,7 @@ class ASTAR():
       # If a solution has been found, return it. Else, expand frontier.
       if (solutionFound):
         return currentNode
+      
       
       self.exploredSet.append( currentNode.state.stateID )
       # visual.exploredList.append(currentNode)
@@ -84,8 +86,10 @@ class ASTAR():
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               
               newNode.state.getID()
-              if (newNode.state.stateID not in self.exploredSet):
+              newHash = newNode.state.stateID
+              if (newHash not in self.exploredSet and newHash not in self.frontierSet):
                 self.frontier.put( (newHeuristic,newNode) )
+                self.frontierSet.append( newHash )
                 # visual.frontierList.append(newNode)
                 self.totalNodes = self.totalNodes + 1
                 

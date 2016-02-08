@@ -7,13 +7,14 @@ class State():
   def __init__(self, controllers):
     self.controllers = controllers
     self.stateID = ""
-    
+
   def getID(self):
-    self.stateID = ""
+    stateID = ""
     for con in self.controllers:
       for p in con.points:
-        self.stateID += str(p)
+        stateID += str(p)
     # print(self.stateID)
+    self.stateID = hash(stateID)
     return
   
   # Print the board to the screen
