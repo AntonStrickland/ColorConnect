@@ -18,8 +18,8 @@ class ASTAR():
     self.gridSize = len(gameboard)
     self.startPointList = startPointList
     self.endPointList = endPointList
-    self.exploredSet = []
-    self.frontierSet = []
+    self.exploredSet = set()
+    self.frontierSet = set()
     
   def ManhattanDist(self, x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
@@ -28,7 +28,7 @@ class ASTAR():
 
 
     solutionFound = False
-    del self.exploredSet[:]
+    self.exploredSet.clear()
 
     # Begin with the root node in the frontier
     self.frontier.put( (rootNode.heuristic, rootNode) )
@@ -45,7 +45,7 @@ class ASTAR():
         return currentNode
       
       
-      self.exploredSet.append( currentNode.state.stateID )
+      self.exploredSet.add( currentNode.state.stateID )
       # visual.exploredList.append(currentNode)
       if (currentNode in visual.frontierList):
         visual.frontierList.remove(currentNode)
@@ -70,18 +70,9 @@ class ASTAR():
                 if c.id == controller.id:
                   ctrl = c
                   
-              
-            
-              # print(endPoint)
-              # print("---")
-              # print((controller.pos_x, controller.pos_y, endPoint[1], endPoint[2]))
               newG = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, self.startPointList[controller.id][1], self.startPointList[controller.id][2])
               newH = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
               newHeuristic = newG + newH
-              
-              # if (controller.id == 2):
-                # print(newState.controllers[controller.id].pos_x, newState.controllers[controller.id].pos_y, endPoint[1], endPoint[2])
-                # print(newHeuristic)
                 
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               
@@ -89,11 +80,9 @@ class ASTAR():
               newHash = newNode.state.stateID
               if (newHash not in self.exploredSet and newHash not in self.frontierSet):
                 self.frontier.put( (newHeuristic,newNode) )
-                self.frontierSet.append( newHash )
+                self.frontierSet.add( newHash )
                 # visual.frontierList.append(newNode)
                 self.totalNodes = self.totalNodes + 1
-                
-                # print(self.totalNodes)
                 
               if (self.totalNodes % 50000 == 0):
                 print("qSize: " + str(self.frontier.qsize()))

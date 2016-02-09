@@ -14,7 +14,7 @@ class State():
       for p in con.points:
         stateID += str(p)
     # print(self.stateID)
-    self.stateID = hash(stateID)
+    self.stateID = stateID
     return
   
   # Print the board to the screen
