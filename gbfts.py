@@ -21,10 +21,7 @@ class GBFTS():
   def ManhattanDist(self, x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
     
-  # Perform the BFTS algorithm
   def Search(self, rootNode):
-
-    print("Performing GBFTS...")
     solutionFound = False
 
     # Begin with the root node in the frontier
@@ -59,7 +56,9 @@ class GBFTS():
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
-              newHeuristic = self.ManhattanDist(controller.pos_x, controller.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
+              newHeuristic = 0
+              for c in newState.controllers:
+                newHeuristic += self.ManhattanDist(c.pos_x, c.pos_y, self.endPointList[c.id][1], self.endPointList[c.id][2])
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               self.frontier.put(newNode)
               # visual.frontierList.append(newNode)
