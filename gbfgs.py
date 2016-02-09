@@ -63,12 +63,9 @@ class GBFGS():
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
-              ctrl = None
+              newHeuristic = 0
               for c in newState.controllers:
-                if c.id == controller.id:
-                  ctrl = c
-
-              newHeuristic = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
+                newHeuristic += self.ManhattanDist(c.pos_x, c.pos_y, self.endPointList[c.id][1], self.endPointList[c.id][2])
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               
               newNode.state.getID()

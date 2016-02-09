@@ -65,15 +65,12 @@ class ASTAR():
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
             newState = controller.result(self.gameboard, currentNode.state, action)
             if (newState is not None):
-              ctrl = None
+              newH = 0
               for c in newState.controllers:
-                if c.id == controller.id:
-                  ctrl = c
+                newH += self.ManhattanDist(c.pos_x, c.pos_y, self.endPointList[c.id][1], self.endPointList[c.id][2])
                   
-              newG = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, self.startPointList[controller.id][1], self.startPointList[controller.id][2])
-              newH = self.ManhattanDist(ctrl.pos_x, ctrl.pos_y, self.endPointList[controller.id][1], self.endPointList[controller.id][2])
+              newG = currentNode.pathCost + 1
               newHeuristic = newG + newH
-                
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
               
               newNode.state.getID()
