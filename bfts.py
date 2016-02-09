@@ -17,10 +17,7 @@ class BFTS():
     self.actionSet = actionSet
     self.gridSize = len(gameboard)
   
-  # Perform the BFTS algorithm
   def Search(self, rootNode):
-
-    print("Performing BFTS...")
     solutionFound = False
 
     # Begin with the root node in the frontier
