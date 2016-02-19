@@ -1,9 +1,8 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 3
+#CS5400 Puzzle Project 4
 
 import node
 import sys
-import visual
 import queue
 
 class GBFTS():
@@ -33,17 +32,13 @@ class GBFTS():
       currentNode = self.frontier.get()
       solutionFound = node.CheckSolution(currentNode)
       
-      # If a solution has been found, return it. Else, expand frontier.
+      # If a solution has been found, return it
       if (solutionFound):
         return currentNode
-
-      if (currentNode in visual.frontierList):
-        visual.frontierList.remove(currentNode)
-
-      self.ExpandFrontier(currentNode)
-      # visual.drawFrontier(currentNode, self.gameboard)
         
-    print("No solution found.")
+      # Else, expand the frontier
+      self.ExpandFrontier(currentNode)
+        
     return None
         
   # Expand the frontier of nodes for searching
@@ -52,15 +47,24 @@ class GBFTS():
     for controller in currentNode.state.controllers:
       for action in self.actionSet:
         if controller.reachedGoal is False:
-          # If this color has not already reached its endpoint and it's a valid action, then add the resulting state to the frontier
+          # If this color has not already reached its endpoint and it's a valid action...
           if (controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
+            
+            # Generate a new state from the result of this state and this action
             newState = controller.result(self.gameboard, currentNode.state, action)
+            
+            # If a valid state has been generated...
             if (newState is not None):
+            
+              # The heuristic is equal to the summed Manhattan Distance from all controllers' current positions to their endpoints
               newHeuristic = 0
               for c in newState.controllers:
                 newHeuristic += self.ManhattanDist(c.pos_x, c.pos_y, self.endPointList[c.id][1], self.endPointList[c.id][2])
+              
+              # Create a new node with this state and heuristic
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1, newHeuristic)
+              
+              # Add the new node to the frontier
               self.frontier.put(newNode)
-              # visual.frontierList.append(newNode)
               self.totalNodes = self.totalNodes + 1
             

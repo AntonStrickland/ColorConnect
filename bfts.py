@@ -1,11 +1,11 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 2
+#CS5400 Puzzle Project 4
+
 import queue
 import state
 import control
 import node
-import visual
-      
+
 class BFTS():
 
   __slots__ = ['gameboard', 'gridSize', 'totalNodes', 'frontier', 'actionSet']
@@ -33,10 +33,9 @@ class BFTS():
       # Otherwise, return the winning node
       if (not solutionFound):
         self.ExpandFrontier(currentNode)
-        visual.drawFrontier(currentNode, self.gameboard)
       else:
         return currentNode
-    print("No solution found.")
+
     return None
         
   # Expand the frontier of nodes for searching
@@ -52,5 +51,4 @@ class BFTS():
               newNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1)
               self.frontier.put(newNode)
               self.totalNodes = self.totalNodes + 1
-              visual.frontierList.append(newNode)
             

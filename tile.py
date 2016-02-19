@@ -1,5 +1,5 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 1
+#CS5400 Puzzle Project 4
 
 class Tile():
   __slots__ = ['x', 'y', 'colored', 'startPoint', 'endPoint']

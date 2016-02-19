@@ -1,5 +1,5 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 2
+#CS5400 Puzzle Project 4
 
 class Node():
     __slots__ = ['state', 'parent', 'action', 'pathCost', 'heuristic']

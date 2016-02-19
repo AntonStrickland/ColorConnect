@@ -1,9 +1,8 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 2
+#CS5400 Puzzle Project 4
 
 import node
 import sys
-import visual
 
 class IDDFTS():
 
@@ -31,8 +30,6 @@ class IDDFTS():
         return (None, "Cutoff")
       else:
         hasBeenCutoff = False
-        #if (self.totalNodes > 18450000):
-        # visual.drawFrontier(currentNode, self.gameboard)
         for controller in currentNode.state.controllers:
           for action in self.actionSet:
             if (controller.reachedGoal is False and controller.checkMoveValidity(action, self.gridSize, self.gridSize, self.gameboard)):
@@ -40,8 +37,6 @@ class IDDFTS():
               if (newState is not None):
                 childNode = node.Node(newState, currentNode, (action, controller.id), currentNode.pathCost + 1)
                 self.totalNodes = self.totalNodes + 1
-                #if (self.totalNodes > 18450000):
-                # visual.frontierList.append(childNode)
                 result = self.DepthLimitedSearch(childNode, depthLimit-1)
                 if (result[1] == "Cutoff"):
                   hasBeenCutoff = True

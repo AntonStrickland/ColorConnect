@@ -1,5 +1,5 @@
 #Name: Anton Strickland
-#CS5400 Puzzle Project 3
+#CS5400 Puzzle Project 4
 
 import control
 import tile
@@ -8,11 +8,10 @@ import bfts
 import iddfts
 import gbfgs
 import gbfts
-import astar
+import asgs
 import state
 from sys import argv
 import time
-import visual
 
 # Set config filepath
 cfgPath = ''
@@ -68,17 +67,14 @@ for c in range(numberOfColors):
 actionSet = ["Left", "Right", "Up", "Down"]
 terminationCondition = False
 
-print(startPointList)
-print(endPointList)
-
 # Initial state
 initialState = state.State(controllerList)
-# visual.initialize(gameboard, gridSize, numberOfColors)
 
 rootNode = node.Node(initialState, None, None, 0)
 startTime = time.time()
 
 print("Performing " + searchAlgorithm + "...")
+
 # This is where we do the thinking for the game strategy
 if (searchAlgorithm == "bfts"):
   BFTS = bfts.BFTS(gameboard, actionSet)
@@ -92,15 +88,18 @@ elif (searchAlgorithm == "gbfgs"):
 elif (searchAlgorithm == "gbfts"):
   GBFTS = gbfts.GBFTS(gameboard, actionSet, endPointList)
   solutionNode = GBFTS.Search(rootNode)
-elif (searchAlgorithm == "astar"):
-  ASTAR = astar.ASTAR(gameboard, actionSet, startPointList, endPointList)
-  solutionNode = ASTAR.Search(rootNode)
+elif (searchAlgorithm == "asgs"):
+  ASGS = asgs.ASGS(gameboard, actionSet, endPointList)
+  solutionNode = ASGS.Search(rootNode)
+elif (searchAlgorithm == "asgs2"):
+  ASGS = asgs.ASGS(gameboard, actionSet, endPointList, True)
+  solutionNode = ASGS.Search(rootNode)
 else:
-  print("Please enter either bfts, iddfts, gbfgs, or gbfts as a search algorithm.")
+  print("Please enter either bfts, iddfts, gbfgs, gbfts, asgs, or asgs2 as a search algorithm.")
   exit()
 
 elapsedTime = time.time() - startTime
-print(elapsedTime)
+# print(elapsedTime)
 
 if (solutionNode is not None):
   solutionPath = node.getSolutionPath(solutionNode)

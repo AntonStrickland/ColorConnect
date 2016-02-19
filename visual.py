@@ -39,8 +39,6 @@ def initialize(grid, gridSize, numberOfColors):
   y = 100
   boxWidth = 10
   halfBoxWidth = 5
-  
-
 
   pygame.display.update()
 
